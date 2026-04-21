@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ResolveX | Department-Wise Complaint Tracking</title>
+  <meta
+    name="description"
+    content="ResolveX is a department-wise complaint tracking system for educational institutions focused on decentralized accountability and transparent resolution."
+  >
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div class="site-shell">
+    <header class="topbar">
+      <a class="brand" href="#hero">
+        <span class="brand-mark">RX</span>
+        <span class="brand-copy">
+          <strong>ResolveX</strong>
+          <small>Decentralized Accountability for Campuses</small>
+        </span>
+      </a>
+      <nav class="nav">
+        <a href="#overview">Overview</a>
+        <a href="#workflow">Workflow</a>
+        <a href="#demo">Live Demo</a>
+        <a href="#architecture">Architecture</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero" id="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">Department-Wise Complaint Tracking System</p>
+          <h1>Campus complaints routed to the right HOD the first time.</h1>
+          <p class="lead">
+            ResolveX removes central admin bottlenecks by sending student complaints
+            directly to the concerned department. The moment an HOD opens a complaint,
+            the system records acknowledgment and moves it into progress.
+          </p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="#demo">Open Interactive Demo</a>
+            <a class="button button-secondary" href="#architecture">View System Design</a>
+          </div>
+          <div class="hero-metrics">
+            <article>
+              <strong>4</strong>
+              <span>Status stages</span>
+            </article>
+            <article>
+              <strong>0</strong>
+              <span>Manual triage steps</span>
+            </article>
+            <article>
+              <strong>1</strong>
+              <span>Department owner per complaint</span>
+            </article>
+          </div>
+        </div>
+
+        <div class="hero-panel">
+          <div class="panel-grid">
+            <article class="mini-card">
+              <span class="mini-label">Student View</span>
+              <h3>Track every complaint transparently</h3>
+              <p>Students can submit issues, review history, and see every status update.</p>
+            </article>
+            <article class="mini-card accent">
+              <span class="mini-label">HOD View</span>
+              <h3>Acknowledge by opening</h3>
+              <p>The “Read and Solve” trigger makes complaint visibility measurable.</p>
+            </article>
+            <article class="mini-card wide">
+              <span class="mini-label">Audit Trail</span>
+              <div class="timeline-preview">
+                <span>Not Seen</span>
+                <span>In Progress</span>
+                <span>Resolved / Rejected</span>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="overview section" id="overview">
+        <div class="section-heading">
+          <p class="eyebrow">Project Brief</p>
+          <h2>Why ResolveX exists</h2>
+        </div>
+        <div class="feature-grid">
+          <article class="feature-card">
+            <h3>Zero Bottleneck</h3>
+            <p>
+              Complaints go straight to the relevant academic department instead of waiting
+              in a central queue.
+            </p>
+          </article>
+          <article class="feature-card">
+            <h3>Direct Accountability</h3>
+            <p>
+              HODs cannot claim a complaint was unseen after opening it because the
+              system records acknowledgment instantly.
+            </p>
+          </article>
+          <article class="feature-card">
+            <h3>Student Transparency</h3>
+            <p>
+              Every status transition is visible in a simple history timeline that students
+              can revisit anytime.
+            </p>
+          </article>
+          <article class="feature-card">
+            <h3>Low-End Hardware Friendly</h3>
+            <p>
+              Department-scoped filtering and lean UI patterns keep the experience smooth on
+              modest institutional hardware.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section class="workflow section" id="workflow">
+        <div class="section-heading">
+          <p class="eyebrow">Complaint Lifecycle</p>
+          <h2>The “Read and Solve” workflow</h2>
+        </div>
+        <div class="workflow-rail">
+          <article class="workflow-step">
+            <span class="status-dot status-not-seen"></span>
+            <h3>Not Seen</h3>
+            <p>A student submits a complaint and the issue lands in the department queue.</p>
+          </article>
+          <article class="workflow-step">
+            <span class="status-dot status-progress"></span>
+            <h3>In Progress</h3>
+            <p>The first HOD view automatically changes the status and logs acknowledgment.</p>
+          </article>
+          <article class="workflow-step">
+            <span class="status-dot status-resolved"></span>
+            <h3>Resolved</h3>
+            <p>The HOD closes the issue with mandatory remarks once action is complete.</p>
+          </article>
+          <article class="workflow-step">
+            <span class="status-dot status-rejected"></span>
+            <h3>Rejected</h3>
+            <p>Out-of-scope or invalid complaints can be closed with a reason and timestamp.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="demo section" id="demo">
+        <div class="section-heading">
+          <p class="eyebrow">Interactive Prototype</p>
+          <h2>See the student portal and HOD dashboard working together</h2>
+        </div>
+
+        <div class="demo-controls">
+          <button class="tab-button active" data-tab="student">Student Portal</button>
+          <button class="tab-button" data-tab="hod">HOD Dashboard</button>
+        </div>
+
+        <div class="demo-grid">
+          <section class="app-card" id="student-panel">
+            <div class="card-header">
+              <div>
+                <p class="card-kicker">Student Workspace</p>
+                <h3>Submit and track complaints</h3>
+              </div>
+              <span class="badge">Role: Student</span>
+            </div>
+
+            <form id="complaint-form" class="complaint-form">
+              <div class="field">
+                <label for="student-name">Student Name</label>
+                <input id="student-name" name="studentName" value="Aarav Nair" required>
+              </div>
+              <div class="field">
+                <label for="department">Department</label>
+                <select id="department" name="department" required>
+                  <option value="Computer Science">Computer Science</option>
+                  <option value="Mechanical Engineering">Mechanical Engineering</option>
+                  <option value="Electronics">Electronics</option>
+                  <option value="Civil Engineering">Civil Engineering</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="title">Complaint Title</label>
+                <input id="title" name="title" placeholder="Example: Lab systems are down" required>
+              </div>
+              <div class="field">
+                <label for="description">Description</label>
+                <textarea id="description" name="description" rows="4" placeholder="Describe the issue clearly so the HOD can act on it." required></textarea>
+              </div>
+              <button class="button button-primary" type="submit">Submit Complaint</button>
+            </form>
+
+            <div class="list-shell">
+              <div class="list-header">
+                <h4>Your Complaint History</h4>
+                <span id="student-count" class="list-count"></span>
+              </div>
+              <div id="student-list" class="complaint-list"></div>
+            </div>
+          </section>
+
+          <section class="app-card hidden" id="hod-panel">
+            <div class="card-header">
+              <div>
+                <p class="card-kicker">HOD Workspace</p>
+                <h3>Department-filtered resolution board</h3>
+              </div>
+              <span class="badge accent">Role: HOD</span>
+            </div>
+
+            <div class="toolbar">
+              <div class="field compact">
+                <label for="hod-department">Department</label>
+                <select id="hod-department">
+                  <option value="Computer Science">Computer Science</option>
+                  <option value="Mechanical Engineering">Mechanical Engineering</option>
+                  <option value="Electronics">Electronics</option>
+                  <option value="Civil Engineering">Civil Engineering</option>
+                </select>
+              </div>
+              <div class="field compact">
+                <label for="status-filter">Status Filter</label>
+                <select id="status-filter">
+                  <option value="ALL">All</option>
+                  <option value="NOT_SEEN">Not Seen</option>
+                  <option value="IN_PROGRESS">In Progress</option>
+                  <option value="RESOLVED">Resolved</option>
+                  <option value="REJECTED">Rejected</option>
+                </select>
+              </div>
+            </div>
+
+            <div id="hod-summary" class="summary-grid"></div>
+
+            <div class="dashboard-layout">
+              <div class="list-shell">
+                <div class="list-header">
+                  <h4>Department Complaints</h4>
+                  <span id="hod-count" class="list-count"></span>
+                </div>
+                <div id="hod-list" class="complaint-list"></div>
+              </div>
+
+              <aside class="detail-shell">
+                <div id="detail-empty" class="detail-empty">
+                  <h4>No complaint selected</h4>
+                  <p>Select a complaint to trigger acknowledgment and manage resolution.</p>
+                </div>
+
+                <div id="detail-panel" class="detail-panel hidden">
+                  <div class="detail-heading">
+                    <div>
+                      <p class="card-kicker">Complaint Detail</p>
+                      <h4 id="detail-title"></h4>
+                    </div>
+                    <span id="detail-status" class="badge"></span>
+                  </div>
+                  <div class="detail-meta" id="detail-meta"></div>
+                  <p id="detail-description" class="detail-description"></p>
+
+                  <div class="field">
+                    <label for="closing-remarks">Closing Remarks</label>
+                    <textarea id="closing-remarks" rows="3" placeholder="Required for resolve or reject actions."></textarea>
+                  </div>
+
+                  <div class="detail-actions">
+                    <button id="resolve-button" class="button button-primary" type="button">Mark Resolved</button>
+                    <button id="reject-button" class="button button-secondary danger" type="button">Mark Rejected</button>
+                  </div>
+
+                  <div class="history-block">
+                    <h5>Status Timeline</h5>
+                    <div id="detail-history" class="history-list"></div>
+                  </div>
+                </div>
+              </aside>
+            </div>
+          </section>
+        </div>
+      </section>
+
+      <section class="architecture section" id="architecture">
+        <div class="section-heading">
+          <p class="eyebrow">System Design</p>
+          <h2>Frontend, backend, and database responsibilities</h2>
+        </div>
+
+        <div class="arch-grid">
+          <article class="arch-card">
+            <h3>Frontend</h3>
+            <p>Role-based React SPA with protected routes for Students and HODs.</p>
+            <ul>
+              <li>Student complaint submission and tracking</li>
+              <li>Department-filtered HOD dashboard</li>
+              <li>Status timeline and resolution actions</li>
+            </ul>
+          </article>
+          <article class="arch-card">
+            <h3>Backend</h3>
+            <p>Java REST services enforcing JWT-based role and department authorization.</p>
+            <ul>
+              <li>Login and registration</li>
+              <li>Complaint CRUD and status updates</li>
+              <li>Read acknowledgment trigger endpoint</li>
+            </ul>
+          </article>
+          <article class="arch-card">
+            <h3>Oracle Database</h3>
+            <p>Immutable storage with complaint ordering and append-only status logging.</p>
+            <ul>
+              <li>Sequences for chronology</li>
+              <li>Triggers for audit history</li>
+              <li>Indexed department filters</li>
+            </ul>
+          </article>
+        </div>
+
+        <div class="api-strip">
+          <div>
+            <span>Suggested API</span>
+            <strong>`POST /auth/login`</strong>
+          </div>
+          <div>
+            <span>Suggested API</span>
+            <strong>`GET /complaints?deptId={id}`</strong>
+          </div>
+          <div>
+            <span>Suggested API</span>
+            <strong>`PATCH /complaints/{id}/view`</strong>
+          </div>
+          <div>
+            <span>Suggested API</span>
+            <strong>`PATCH /complaints/{id}/resolve`</strong>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="./app.js"></script>
+</body>
+</html>
