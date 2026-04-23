@@ -3,230 +3,245 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ResolveX | Department-Wise Complaint Tracking</title>
-  <meta
-    name="description"
-    content="ResolveX is a department-wise complaint tracking system for educational institutions focused on decentralized accountability and transparent resolution."
-  >
+  <title>ResolveX | CVR Complaint Routing System</title>
+  <meta name="description" content="ResolveX is a department-specific complaint tracking application for educational institutions, centered on decentralized routing and accountability.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&family=Manrope:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./styles.css">
 </head>
 <body>
-  <div class="site-shell">
+  <div class="page-shell">
     <header class="topbar">
       <a class="brand" href="#hero">
         <span class="brand-mark">RX</span>
-        <span class="brand-copy">
+        <span>
           <strong>ResolveX</strong>
-          <small>Decentralized Accountability for Campuses</small>
+          <small>CVR Decentralized Complaint Framework</small>
         </span>
       </a>
       <nav class="nav">
-        <a href="#overview">Overview</a>
-        <a href="#workflow">Workflow</a>
-        <a href="#demo">Live Demo</a>
-        <a href="#architecture">Architecture</a>
+        <a href="#spec">Spec</a>
+        <a href="#iam">IAM</a>
+        <a href="#portals">Portals</a>
+        <a href="#application">Application</a>
       </nav>
     </header>
 
     <main>
       <section class="hero" id="hero">
         <div class="hero-copy">
-          <p class="eyebrow">Department-Wise Complaint Tracking System</p>
-          <h1>Campus complaints routed to the right HOD the first time.</h1>
+          <p class="eyebrow">System Specification & Deployment Framework</p>
+          <h1>Complaints that go to the right department, with accountability built in.</h1>
           <p class="lead">
-            ResolveX removes central admin bottlenecks by sending student complaints
-            directly to the concerned department. The moment an HOD opens a complaint,
-            the system records acknowledgment and moves it into progress.
+            ResolveX is a decentralized grievance routing application for educational institutions.
+            Students file issues by department. HODs handle only their own queues. Opening a complaint
+            is treated as a formal acknowledgment through the "Read and Solve" mandate.
           </p>
           <div class="hero-actions">
-            <a class="button button-primary" href="#demo">Open Interactive Demo</a>
-            <a class="button button-secondary" href="#architecture">View System Design</a>
+            <a class="button button-primary" href="#application">Launch Demo Application</a>
+            <a class="button button-secondary" href="#spec">Review Specification</a>
           </div>
-          <div class="hero-metrics">
+          <div class="hero-grid">
+            <article>
+              <strong>XXB81AXXXX</strong>
+              <span>Institutional ID mask</span>
+            </article>
             <article>
               <strong>4</strong>
-              <span>Status stages</span>
+              <span>Strict complaint states</span>
             </article>
             <article>
-              <strong>0</strong>
-              <span>Manual triage steps</span>
-            </article>
-            <article>
-              <strong>1</strong>
-              <span>Department owner per complaint</span>
+              <strong>i3 / 4GB</strong>
+              <span>Low-resource target</span>
             </article>
           </div>
         </div>
 
         <div class="hero-panel">
-          <div class="panel-grid">
-            <article class="mini-card">
-              <span class="mini-label">Student View</span>
-              <h3>Track every complaint transparently</h3>
-              <p>Students can submit issues, review history, and see every status update.</p>
-            </article>
-            <article class="mini-card accent">
-              <span class="mini-label">HOD View</span>
-              <h3>Acknowledge by opening</h3>
-              <p>The “Read and Solve” trigger makes complaint visibility measurable.</p>
-            </article>
-            <article class="mini-card wide">
-              <span class="mini-label">Audit Trail</span>
-              <div class="timeline-preview">
-                <span>Not Seen</span>
-                <span>In Progress</span>
-                <span>Resolved / Rejected</span>
-              </div>
-            </article>
+          <div class="glass-card">
+            <p class="panel-kicker">Operational Mandate</p>
+            <h2>The first view is the first acknowledgment.</h2>
+            <ul class="signal-list">
+              <li>Students see transparent status progression</li>
+              <li>HODs are isolated to department-specific data</li>
+              <li>Audit history preserves every transition</li>
+            </ul>
           </div>
         </div>
       </section>
 
-      <section class="overview section" id="overview">
+      <section class="section" id="spec">
         <div class="section-heading">
-          <p class="eyebrow">Project Brief</p>
-          <h2>Why ResolveX exists</h2>
+          <p class="eyebrow">System Vision</p>
+          <h2>ResolveX operating model</h2>
         </div>
-        <div class="feature-grid">
-          <article class="feature-card">
-            <h3>Zero Bottleneck</h3>
-            <p>
-              Complaints go straight to the relevant academic department instead of waiting
-              in a central queue.
-            </p>
+        <div class="cards three">
+          <article class="info-card">
+            <h3>Decentralized Routing</h3>
+            <p>Complaints go directly to the concerned HOD instead of waiting in a central admin bottleneck.</p>
           </article>
-          <article class="feature-card">
-            <h3>Direct Accountability</h3>
-            <p>
-              HODs cannot claim a complaint was unseen after opening it because the
-              system records acknowledgment instantly.
-            </p>
+          <article class="info-card">
+            <h3>Read and Solve</h3>
+            <p>Opening complaint details automatically transitions the issue from `Not Seen` to `In Progress`.</p>
           </article>
-          <article class="feature-card">
-            <h3>Student Transparency</h3>
-            <p>
-              Every status transition is visible in a simple history timeline that students
-              can revisit anytime.
-            </p>
-          </article>
-          <article class="feature-card">
-            <h3>Low-End Hardware Friendly</h3>
-            <p>
-              Department-scoped filtering and lean UI patterns keep the experience smooth on
-              modest institutional hardware.
-            </p>
+          <article class="info-card">
+            <h3>Audit Integrity</h3>
+            <p>Every complaint state change must remain historically visible even after the issue is closed.</p>
           </article>
         </div>
       </section>
 
-      <section class="workflow section" id="workflow">
+      <section class="section" id="iam">
         <div class="section-heading">
-          <p class="eyebrow">Complaint Lifecycle</p>
-          <h2>The “Read and Solve” workflow</h2>
+          <p class="eyebrow">Identity & Access</p>
+          <h2>Institutional ID and official email rules</h2>
         </div>
-        <div class="workflow-rail">
-          <article class="workflow-step">
-            <span class="status-dot status-not-seen"></span>
-            <h3>Not Seen</h3>
-            <p>A student submits a complaint and the issue lands in the department queue.</p>
+        <div class="iam-layout">
+          <article class="info-card highlight">
+            <h3>ID Logic</h3>
+            <p>The required identity format is `XXB81AXXXX`, combining a numeric prefix, fixed institutional code, and alphanumeric suffix.</p>
+            <div class="code-chip">Example: `21B81A0501`</div>
+            <div class="code-chip">Email: `21B81A0501@cvr.ac.in`</div>
           </article>
-          <article class="workflow-step">
-            <span class="status-dot status-progress"></span>
-            <h3>In Progress</h3>
-            <p>The first HOD view automatically changes the status and logs acknowledgment.</p>
-          </article>
-          <article class="workflow-step">
-            <span class="status-dot status-resolved"></span>
-            <h3>Resolved</h3>
-            <p>The HOD closes the issue with mandatory remarks once action is complete.</p>
-          </article>
-          <article class="workflow-step">
-            <span class="status-dot status-rejected"></span>
-            <h3>Rejected</h3>
-            <p>Out-of-scope or invalid complaints can be closed with a reason and timestamp.</p>
-          </article>
-        </div>
-      </section>
-
-      <section class="demo section" id="demo">
-        <div class="section-heading">
-          <p class="eyebrow">Interactive Prototype</p>
-          <h2>See the student portal and HOD dashboard working together</h2>
-        </div>
-
-        <div class="demo-controls">
-          <button class="tab-button active" data-tab="student">Student Portal</button>
-          <button class="tab-button" data-tab="hod">HOD Dashboard</button>
-        </div>
-
-        <div class="demo-grid">
-          <section class="app-card" id="student-panel">
-            <div class="card-header">
+          <article class="info-card">
+            <h3>Initial Admin/HOD Accounts</h3>
+            <div class="admin-list">
               <div>
-                <p class="card-kicker">Student Workspace</p>
-                <h3>Submit and track complaints</h3>
+                <strong>Raks</strong>
+                <span>System Admin / Lead Coordinator</span>
               </div>
-              <span class="badge">Role: Student</span>
+              <div>
+                <strong>CVR</strong>
+                <span>Department Head / Oversight</span>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" id="portals">
+        <div class="section-heading">
+          <p class="eyebrow">Role Framework</p>
+          <h2>Two portals, one accountability chain</h2>
+        </div>
+        <div class="cards two">
+          <article class="info-card">
+            <h3>Student Portal</h3>
+            <ul class="signal-list">
+              <li>Submit category, department, and detailed grievance text</li>
+              <li>Auto-attach institutional ID and timestamp</li>
+              <li>Track complaint history, status, and remarks</li>
+            </ul>
+          </article>
+          <article class="info-card">
+            <h3>HOD Dashboard</h3>
+            <ul class="signal-list">
+              <li>Default department-specific filtering</li>
+              <li>Silent status update on complaint open</li>
+              <li>Mandatory remarks before terminal actions</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section class="section application" id="application">
+        <div class="section-heading">
+          <p class="eyebrow">Web Application</p>
+          <h2>Interactive ResolveX dashboard</h2>
+        </div>
+
+        <div class="tabset">
+          <button class="tab-button active" data-panel="student">Student Portal</button>
+          <button class="tab-button" data-panel="hod">HOD Dashboard</button>
+        </div>
+
+        <div class="application-grid">
+          <section class="app-panel" id="student-panel">
+            <div class="panel-header">
+              <div>
+                <p class="panel-kicker">Student Submission & Tracking</p>
+                <h3>Submit with institutional identity rules</h3>
+              </div>
+              <span class="badge">Student</span>
             </div>
 
-            <form id="complaint-form" class="complaint-form">
+            <form id="student-form" class="form-grid">
               <div class="field">
                 <label for="student-name">Student Name</label>
-                <input id="student-name" name="studentName" value="Aarav Nair" required>
+                <input id="student-name" name="studentName" value="Harsha Vardhan" required>
               </div>
               <div class="field">
-                <label for="department">Department</label>
-                <select id="department" name="department" required>
-                  <option value="Computer Science">Computer Science</option>
-                  <option value="Mechanical Engineering">Mechanical Engineering</option>
-                  <option value="Electronics">Electronics</option>
-                  <option value="Civil Engineering">Civil Engineering</option>
+                <label for="institutional-id">Institutional ID</label>
+                <input id="institutional-id" name="institutionalId" value="21B81A0501" required>
+                <small id="id-hint">Format: XXB81AXXXX</small>
+              </div>
+              <div class="field">
+                <label for="official-email">Official Email</label>
+                <input id="official-email" name="officialEmail" readonly>
+              </div>
+              <div class="field">
+                <label for="category">Category</label>
+                <select id="category" name="category">
+                  <option>Infrastructure</option>
+                  <option>Academic</option>
+                  <option>Laboratory</option>
+                  <option>Administration</option>
                 </select>
               </div>
               <div class="field">
-                <label for="title">Complaint Title</label>
-                <input id="title" name="title" placeholder="Example: Lab systems are down" required>
+                <label for="department">Department</label>
+                <select id="department" name="department">
+                  <option>CSE</option>
+                  <option>ECE</option>
+                  <option>EEE</option>
+                  <option>Civil</option>
+                </select>
               </div>
-              <div class="field">
-                <label for="description">Description</label>
-                <textarea id="description" name="description" rows="4" placeholder="Describe the issue clearly so the HOD can act on it." required></textarea>
+              <div class="field field-wide">
+                <label for="description">Detailed Description</label>
+                <textarea id="description" name="description" rows="4" placeholder="Describe the issue in detail." required></textarea>
               </div>
               <button class="button button-primary" type="submit">Submit Complaint</button>
             </form>
 
-            <div class="list-shell">
+            <div class="list-card">
               <div class="list-header">
-                <h4>Your Complaint History</h4>
-                <span id="student-count" class="list-count"></span>
+                <h4>Complaint History</h4>
+                <span id="student-count"></span>
               </div>
-              <div id="student-list" class="complaint-list"></div>
+              <div id="student-complaints" class="stack"></div>
             </div>
           </section>
 
-          <section class="app-card hidden" id="hod-panel">
-            <div class="card-header">
+          <section class="app-panel hidden" id="hod-panel">
+            <div class="panel-header">
               <div>
-                <p class="card-kicker">HOD Workspace</p>
-                <h3>Department-filtered resolution board</h3>
+                <p class="panel-kicker">Department Resolution Center</p>
+                <h3>Read, acknowledge, and close with remarks</h3>
               </div>
-              <span class="badge accent">Role: HOD</span>
+              <span class="badge accent">HOD</span>
             </div>
 
             <div class="toolbar">
               <div class="field compact">
-                <label for="hod-department">Department</label>
-                <select id="hod-department">
-                  <option value="Computer Science">Computer Science</option>
-                  <option value="Mechanical Engineering">Mechanical Engineering</option>
-                  <option value="Electronics">Electronics</option>
-                  <option value="Civil Engineering">Civil Engineering</option>
+                <label for="hod-name">HOD / Admin</label>
+                <select id="hod-name">
+                  <option value="Raks">Raks</option>
+                  <option value="CVR">CVR</option>
                 </select>
               </div>
               <div class="field compact">
-                <label for="status-filter">Status Filter</label>
+                <label for="hod-department">Department</label>
+                <select id="hod-department">
+                  <option value="CSE">CSE</option>
+                  <option value="ECE">ECE</option>
+                  <option value="EEE">EEE</option>
+                  <option value="Civil">Civil</option>
+                </select>
+              </div>
+              <div class="field compact">
+                <label for="status-filter">Status</label>
                 <select id="status-filter">
                   <option value="ALL">All</option>
                   <option value="NOT_SEEN">Not Seen</option>
@@ -237,108 +252,48 @@
               </div>
             </div>
 
-            <div id="hod-summary" class="summary-grid"></div>
+            <div id="summary-grid" class="summary-grid"></div>
 
-            <div class="dashboard-layout">
-              <div class="list-shell">
+            <div class="dashboard-grid">
+              <div class="list-card">
                 <div class="list-header">
-                  <h4>Department Complaints</h4>
-                  <span id="hod-count" class="list-count"></span>
+                  <h4>Department Queue</h4>
+                  <span id="hod-count"></span>
                 </div>
-                <div id="hod-list" class="complaint-list"></div>
+                <div id="hod-complaints" class="stack"></div>
               </div>
 
-              <aside class="detail-shell">
-                <div id="detail-empty" class="detail-empty">
+              <aside class="detail-card">
+                <div id="detail-empty" class="empty-state">
                   <h4>No complaint selected</h4>
-                  <p>Select a complaint to trigger acknowledgment and manage resolution.</p>
+                  <p>Select a complaint to trigger the "Read and Solve" acknowledgment.</p>
                 </div>
-
-                <div id="detail-panel" class="detail-panel hidden">
-                  <div class="detail-heading">
+                <div id="detail-view" class="hidden">
+                  <div class="detail-top">
                     <div>
-                      <p class="card-kicker">Complaint Detail</p>
+                      <p class="panel-kicker">Complaint Detail</p>
                       <h4 id="detail-title"></h4>
                     </div>
                     <span id="detail-status" class="badge"></span>
                   </div>
-                  <div class="detail-meta" id="detail-meta"></div>
+                  <div id="detail-meta" class="detail-meta"></div>
                   <p id="detail-description" class="detail-description"></p>
-
                   <div class="field">
-                    <label for="closing-remarks">Closing Remarks</label>
-                    <textarea id="closing-remarks" rows="3" placeholder="Required for resolve or reject actions."></textarea>
+                    <label for="hod-remarks">Mandatory Closing Remarks</label>
+                    <textarea id="hod-remarks" rows="3" placeholder="Required for Resolved or Rejected."></textarea>
                   </div>
-
                   <div class="detail-actions">
-                    <button id="resolve-button" class="button button-primary" type="button">Mark Resolved</button>
-                    <button id="reject-button" class="button button-secondary danger" type="button">Mark Rejected</button>
+                    <button id="resolve-btn" class="button button-primary" type="button">Resolve</button>
+                    <button id="reject-btn" class="button button-secondary danger" type="button">Reject</button>
                   </div>
-
-                  <div class="history-block">
-                    <h5>Status Timeline</h5>
-                    <div id="detail-history" class="history-list"></div>
+                  <div class="timeline-card">
+                    <h5>Audit Timeline</h5>
+                    <div id="detail-history" class="stack"></div>
                   </div>
                 </div>
               </aside>
             </div>
           </section>
-        </div>
-      </section>
-
-      <section class="architecture section" id="architecture">
-        <div class="section-heading">
-          <p class="eyebrow">System Design</p>
-          <h2>Frontend, backend, and database responsibilities</h2>
-        </div>
-
-        <div class="arch-grid">
-          <article class="arch-card">
-            <h3>Frontend</h3>
-            <p>Role-based React SPA with protected routes for Students and HODs.</p>
-            <ul>
-              <li>Student complaint submission and tracking</li>
-              <li>Department-filtered HOD dashboard</li>
-              <li>Status timeline and resolution actions</li>
-            </ul>
-          </article>
-          <article class="arch-card">
-            <h3>Backend</h3>
-            <p>Java REST services enforcing JWT-based role and department authorization.</p>
-            <ul>
-              <li>Login and registration</li>
-              <li>Complaint CRUD and status updates</li>
-              <li>Read acknowledgment trigger endpoint</li>
-            </ul>
-          </article>
-          <article class="arch-card">
-            <h3>Oracle Database</h3>
-            <p>Immutable storage with complaint ordering and append-only status logging.</p>
-            <ul>
-              <li>Sequences for chronology</li>
-              <li>Triggers for audit history</li>
-              <li>Indexed department filters</li>
-            </ul>
-          </article>
-        </div>
-
-        <div class="api-strip">
-          <div>
-            <span>Suggested API</span>
-            <strong>`POST /auth/login`</strong>
-          </div>
-          <div>
-            <span>Suggested API</span>
-            <strong>`GET /complaints?deptId={id}`</strong>
-          </div>
-          <div>
-            <span>Suggested API</span>
-            <strong>`PATCH /complaints/{id}/view`</strong>
-          </div>
-          <div>
-            <span>Suggested API</span>
-            <strong>`PATCH /complaints/{id}/resolve`</strong>
-          </div>
         </div>
       </section>
     </main>

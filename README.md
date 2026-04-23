@@ -1,39 +1,25 @@
-# ResolveX Website
+# ResolveX
 
-This workspace contains a frontend prototype for **ResolveX**, a department-wise complaint tracking system for educational institutions.
+ResolveX is a department-specific complaint tracking web application for educational institutions. This prototype demonstrates the decentralized routing model, institutional identity logic, and the "Read and Solve" workflow where an HOD acknowledges responsibility by opening a complaint.
 
-## What is included
+## Included Files
 
-- `index.html`: Main site structure and interactive demo layout
-- `styles.css`: Full responsive styling
-- `app.js`: Complaint workflow logic, student tracking, HOD filtering, and the "Read and Solve" trigger
-- `vercel.json`: Basic static deployment configuration
-- `ResolveX_Build_Context_Prompt.md`: Extended system and product context for future full-stack implementation
+- `index.html`: ResolveX single-page frontend
+- `styles.css`: Responsive UI and dashboard styling
+- `app.js`: Institutional ID validation, student submission flow, HOD workflow, and audit timeline interactions
+- `vercel.json`: Static Vercel deployment configuration
+- `ResolveX_System_Specification.md`: Official system specification used for this build
 
-## Demo behavior
+## Demo Features
 
-- Students can submit complaints
-- Complaints are tracked in the student panel
-- HODs can filter by department and status
-- Opening a `Not Seen` complaint automatically marks it `In Progress`
-- Complaints can be finalized as `Resolved` or `Rejected` with remarks
-- Demo data persists in browser local storage
+- Institutional ID format validation using `XXB81AXXXX`
+- Official email generation with `@cvr.ac.in`
+- Student complaint submission with category, department, and description
+- Department-isolated HOD dashboard
+- Automatic `Not Seen -> In Progress` transition on complaint open
+- Mandatory remarks for `Resolved` and `Rejected`
+- Complaint history timeline with audit-style events
 
-## Local usage
+## Deployment
 
-Open `index.html` in a browser to view the site.
-
-## Vercel deployment
-
-This frontend can be deployed as a static site on Vercel.
-
-Suggested deployment settings:
-
-- Framework preset: `Other`
-- Root directory: current workspace
-- Build command: leave empty
-- Output directory: leave empty
-
-## Important note
-
-If you plan to deploy through Vercel, use a new token. Any token pasted into chat should be revoked and replaced before use.
+This project is configured as a static site and can be deployed directly to Vercel.

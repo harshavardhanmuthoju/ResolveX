@@ -1,167 +1,158 @@
-const STORAGE_KEY = "resolvex-demo-state-v1";
+const STORAGE_KEY = "resolvex-cvr-demo-v2";
+const ID_PATTERN = /^\d{2}B81A[A-Z0-9]{4}$/;
 
 const initialComplaints = [
   {
-    id: 1001,
-    studentName: "Aarav Nair",
-    department: "Computer Science",
-    title: "Lab systems are offline",
-    description: "The software lab on block B has systems failing to boot, which is disrupting internal practical sessions.",
+    id: 3001,
+    studentName: "Harsha Vardhan",
+    institutionalId: "21B81A0501",
+    officialEmail: "21B81A0501@cvr.ac.in",
+    category: "Laboratory",
+    department: "CSE",
+    description: "Systems in Lab-3 fail during compiler sessions and require repeated manual restarts.",
     status: "NOT_SEEN",
     remarks: "",
-    createdAt: "2026-04-21 09:10",
+    timestamp: "2026-04-23 09:15",
     history: [
       {
-        statusFrom: null,
-        statusTo: "NOT_SEEN",
+        from: null,
+        to: "NOT_SEEN",
         actor: "System",
-        at: "2026-04-21 09:10",
-        remarks: "Complaint submitted by student."
+        at: "2026-04-23 09:15",
+        note: "Complaint submitted and routed to CSE."
       }
     ]
   },
   {
-    id: 1002,
-    studentName: "Aarav Nair",
-    department: "Mechanical Engineering",
-    title: "Workshop ventilation issue",
-    description: "The workshop area ventilation is not functioning properly during afternoon lab sessions.",
+    id: 3002,
+    studentName: "Harsha Vardhan",
+    institutionalId: "21B81A0501",
+    officialEmail: "21B81A0501@cvr.ac.in",
+    category: "Infrastructure",
+    department: "ECE",
+    description: "Projector alignment in the communication lab is making board visibility poor during practical demonstrations.",
     status: "IN_PROGRESS",
     remarks: "",
-    createdAt: "2026-04-20 14:35",
+    timestamp: "2026-04-22 12:05",
     history: [
       {
-        statusFrom: null,
-        statusTo: "NOT_SEEN",
+        from: null,
+        to: "NOT_SEEN",
         actor: "System",
-        at: "2026-04-20 14:35",
-        remarks: "Complaint submitted by student."
+        at: "2026-04-22 12:05",
+        note: "Complaint submitted and routed to ECE."
       },
       {
-        statusFrom: "NOT_SEEN",
-        statusTo: "IN_PROGRESS",
-        actor: "HOD - Mechanical Engineering",
-        at: "2026-04-20 15:02",
-        remarks: "Complaint opened and acknowledged."
-      }
-    ]
-  },
-  {
-    id: 1003,
-    studentName: "Nisha Varma",
-    department: "Computer Science",
-    title: "Projector not working in Seminar Hall 2",
-    description: "The projector fails to display HDMI input during faculty presentations, causing repeated session delays.",
-    status: "RESOLVED",
-    remarks: "AV unit cable replaced and projector tested successfully.",
-    createdAt: "2026-04-19 11:20",
-    history: [
-      {
-        statusFrom: null,
-        statusTo: "NOT_SEEN",
-        actor: "System",
-        at: "2026-04-19 11:20",
-        remarks: "Complaint submitted by student."
-      },
-      {
-        statusFrom: "NOT_SEEN",
-        statusTo: "IN_PROGRESS",
-        actor: "HOD - Computer Science",
-        at: "2026-04-19 11:41",
-        remarks: "Complaint opened and acknowledged."
-      },
-      {
-        statusFrom: "IN_PROGRESS",
-        statusTo: "RESOLVED",
-        actor: "HOD - Computer Science",
-        at: "2026-04-19 13:12",
-        remarks: "AV unit cable replaced and projector tested successfully."
+        from: "NOT_SEEN",
+        to: "IN_PROGRESS",
+        actor: "CVR",
+        at: "2026-04-22 12:18",
+        note: "Complaint opened and acknowledged."
       }
     ]
   }
 ];
 
 const state = {
-  complaints: loadComplaints(),
-  activeTab: "student",
-  hodDepartment: "Computer Science",
-  statusFilter: "ALL",
+  complaints: loadState(),
+  panel: "student",
+  hodName: "Raks",
+  hodDepartment: "CSE",
+  filter: "ALL",
   selectedComplaintId: null
 };
 
 const refs = {
+  tabButtons: Array.from(document.querySelectorAll(".tab-button")),
   studentPanel: document.getElementById("student-panel"),
   hodPanel: document.getElementById("hod-panel"),
-  tabButtons: Array.from(document.querySelectorAll(".tab-button")),
-  complaintForm: document.getElementById("complaint-form"),
-  studentList: document.getElementById("student-list"),
+  form: document.getElementById("student-form"),
+  studentName: document.getElementById("student-name"),
+  institutionalId: document.getElementById("institutional-id"),
+  officialEmail: document.getElementById("official-email"),
+  idHint: document.getElementById("id-hint"),
+  studentComplaints: document.getElementById("student-complaints"),
   studentCount: document.getElementById("student-count"),
+  hodName: document.getElementById("hod-name"),
   hodDepartment: document.getElementById("hod-department"),
   statusFilter: document.getElementById("status-filter"),
-  hodSummary: document.getElementById("hod-summary"),
-  hodList: document.getElementById("hod-list"),
+  summaryGrid: document.getElementById("summary-grid"),
+  hodComplaints: document.getElementById("hod-complaints"),
   hodCount: document.getElementById("hod-count"),
   detailEmpty: document.getElementById("detail-empty"),
-  detailPanel: document.getElementById("detail-panel"),
+  detailView: document.getElementById("detail-view"),
   detailTitle: document.getElementById("detail-title"),
   detailStatus: document.getElementById("detail-status"),
   detailMeta: document.getElementById("detail-meta"),
   detailDescription: document.getElementById("detail-description"),
   detailHistory: document.getElementById("detail-history"),
-  closingRemarks: document.getElementById("closing-remarks"),
-  resolveButton: document.getElementById("resolve-button"),
-  rejectButton: document.getElementById("reject-button")
+  remarks: document.getElementById("hod-remarks"),
+  resolveBtn: document.getElementById("resolve-btn"),
+  rejectBtn: document.getElementById("reject-btn")
 };
 
-initialize();
+init();
 
-function initialize() {
+function init() {
   bindEvents();
+  syncOfficialEmail();
   render();
 }
 
 function bindEvents() {
   refs.tabButtons.forEach((button) => {
     button.addEventListener("click", () => {
-      state.activeTab = button.dataset.tab;
-      renderTabs();
+      state.panel = button.dataset.panel;
+      renderPanels();
     });
   });
 
-  refs.complaintForm.addEventListener("submit", (event) => {
-    event.preventDefault();
+  refs.institutionalId.addEventListener("input", syncOfficialEmail);
 
-    const formData = new FormData(refs.complaintForm);
-    const studentName = formData.get("studentName").trim();
-    const department = formData.get("department");
-    const title = formData.get("title").trim();
-    const description = formData.get("description").trim();
+  refs.form.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const formData = new FormData(refs.form);
+    const institutionalId = String(formData.get("institutionalId")).toUpperCase().trim();
+
+    if (!ID_PATTERN.test(institutionalId)) {
+      refs.idHint.textContent = "Institutional ID must match XXB81AXXXX.";
+      refs.idHint.style.color = "#b63e3e";
+      return;
+    }
 
     const complaint = {
-      id: nextComplaintId(),
-      studentName,
-      department,
-      title,
-      description,
+      id: nextId(),
+      studentName: String(formData.get("studentName")).trim(),
+      institutionalId,
+      officialEmail: `${institutionalId}@cvr.ac.in`,
+      category: String(formData.get("category")),
+      department: String(formData.get("department")),
+      description: String(formData.get("description")).trim(),
       status: "NOT_SEEN",
       remarks: "",
-      createdAt: formatNow(),
+      timestamp: nowString(),
       history: [
         {
-          statusFrom: null,
-          statusTo: "NOT_SEEN",
+          from: null,
+          to: "NOT_SEEN",
           actor: "System",
-          at: formatNow(),
-          remarks: "Complaint submitted by student."
+          at: nowString(),
+          note: `Complaint submitted and routed to ${String(formData.get("department"))}.`
         }
       ]
     };
 
     state.complaints.unshift(complaint);
-    state.selectedComplaintId = complaint.department === state.hodDepartment ? complaint.id : state.selectedComplaintId;
-    persist();
-    refs.complaintForm.reset();
-    document.getElementById("student-name").value = studentName || "Aarav Nair";
+    saveState();
+    refs.form.reset();
+    refs.studentName.value = complaint.studentName;
+    refs.institutionalId.value = complaint.institutionalId;
+    syncOfficialEmail();
+    render();
+  });
+
+  refs.hodName.addEventListener("change", (event) => {
+    state.hodName = event.target.value;
     render();
   });
 
@@ -172,167 +163,171 @@ function bindEvents() {
   });
 
   refs.statusFilter.addEventListener("change", (event) => {
-    state.statusFilter = event.target.value;
+    state.filter = event.target.value;
     state.selectedComplaintId = null;
     render();
   });
 
-  refs.resolveButton.addEventListener("click", () => finalizeComplaint("RESOLVED"));
-  refs.rejectButton.addEventListener("click", () => finalizeComplaint("REJECTED"));
+  refs.resolveBtn.addEventListener("click", () => finalizeComplaint("RESOLVED"));
+  refs.rejectBtn.addEventListener("click", () => finalizeComplaint("REJECTED"));
+}
+
+function syncOfficialEmail() {
+  const value = refs.institutionalId.value.toUpperCase().trim();
+  refs.institutionalId.value = value;
+  refs.officialEmail.value = value ? `${value}@cvr.ac.in` : "";
+  refs.idHint.textContent = ID_PATTERN.test(value)
+    ? "Institutional ID accepted."
+    : "Format: XXB81AXXXX";
+  refs.idHint.style.color = ID_PATTERN.test(value) ? "#12805c" : "";
 }
 
 function render() {
-  renderTabs();
-  renderStudentList();
-  renderHodSummary();
-  renderHodList();
-  renderDetailPanel();
+  renderPanels();
+  renderStudentComplaints();
+  renderSummary();
+  renderHodComplaints();
+  renderDetail();
 }
 
-function renderTabs() {
+function renderPanels() {
   refs.tabButtons.forEach((button) => {
-    button.classList.toggle("active", button.dataset.tab === state.activeTab);
+    button.classList.toggle("active", button.dataset.panel === state.panel);
   });
-
-  refs.studentPanel.classList.toggle("hidden", state.activeTab !== "student");
-  refs.hodPanel.classList.toggle("hidden", state.activeTab !== "hod");
+  refs.studentPanel.classList.toggle("hidden", state.panel !== "student");
+  refs.hodPanel.classList.toggle("hidden", state.panel !== "hod");
 }
 
-function renderStudentList() {
-  const studentName = document.getElementById("student-name").value.trim() || "Aarav Nair";
-  const complaints = state.complaints.filter((item) => item.studentName === studentName);
+function renderStudentComplaints() {
+  const activeId = refs.institutionalId.value.toUpperCase().trim();
+  const complaints = state.complaints.filter((item) => item.institutionalId === activeId);
   refs.studentCount.textContent = `${complaints.length} complaint${complaints.length === 1 ? "" : "s"}`;
 
-  if (complaints.length === 0) {
-    refs.studentList.innerHTML = emptyState("No complaints yet", "Submit a complaint to start tracking its department-wise progress.");
+  if (!complaints.length) {
+    refs.studentComplaints.innerHTML = emptyCard("No complaints yet", "Submit a complaint to start your ResolveX history.");
     return;
   }
 
-  refs.studentList.innerHTML = complaints
-    .map((item) => `
-      <article class="complaint-item">
-        <div class="item-topline">
-          <h5>${escapeHtml(item.title)}</h5>
-          <span class="status-pill ${statusClass(item.status)}">${labelStatus(item.status)}</span>
-        </div>
-        <div class="meta-row">
-          <span>Dept: ${escapeHtml(item.department)}</span>
-          <span>ID: #${item.id}</span>
-          <span>${item.createdAt}</span>
-        </div>
-        <p class="detail-description">${escapeHtml(item.description)}</p>
-        <div class="history-list">
-          ${item.history.slice().reverse().map(renderHistoryItem).join("")}
-        </div>
-      </article>
-    `)
-    .join("");
+  refs.studentComplaints.innerHTML = complaints.map(renderComplaintCard).join("");
 }
 
-function renderHodSummary() {
-  const complaints = state.complaints.filter((item) => item.department === state.hodDepartment);
+function renderComplaintCard(item) {
+  return `
+    <article class="queue-item">
+      <div class="queue-top">
+        <h5>${escapeHtml(item.category)} | ${escapeHtml(item.department)}</h5>
+        <span class="status-pill ${statusClass(item.status)}">${statusLabel(item.status)}</span>
+      </div>
+      <p><strong>ID:</strong> #${item.id} | <strong>Email:</strong> ${escapeHtml(item.officialEmail)}</p>
+      <p>${escapeHtml(item.description)}</p>
+      <div class="stack">
+        ${item.history.slice().reverse().map(renderHistoryItem).join("")}
+      </div>
+    </article>
+  `;
+}
+
+function renderSummary() {
+  refs.hodName.value = state.hodName;
+  refs.hodDepartment.value = state.hodDepartment;
+  refs.statusFilter.value = state.filter;
+
+  const deptComplaints = state.complaints.filter((item) => item.department === state.hodDepartment);
   const counts = {
-    total: complaints.length,
-    notSeen: complaints.filter((item) => item.status === "NOT_SEEN").length,
-    inProgress: complaints.filter((item) => item.status === "IN_PROGRESS").length,
-    resolved: complaints.filter((item) => item.status === "RESOLVED").length,
-    rejected: complaints.filter((item) => item.status === "REJECTED").length
+    total: deptComplaints.length,
+    notSeen: deptComplaints.filter((item) => item.status === "NOT_SEEN").length,
+    inProgress: deptComplaints.filter((item) => item.status === "IN_PROGRESS").length,
+    closed: deptComplaints.filter((item) => item.status === "RESOLVED" || item.status === "REJECTED").length
   };
 
-  refs.hodSummary.innerHTML = `
-    <article class="summary-card">
-      <strong>${counts.total}</strong>
-      <span>Total</span>
-    </article>
-    <article class="summary-card">
-      <strong>${counts.notSeen}</strong>
-      <span>Not Seen</span>
-    </article>
-    <article class="summary-card">
-      <strong>${counts.inProgress}</strong>
-      <span>In Progress</span>
-    </article>
-    <article class="summary-card">
-      <strong>${counts.resolved + counts.rejected}</strong>
-      <span>Closed</span>
-    </article>
+  refs.summaryGrid.innerHTML = `
+    <article class="summary-item"><strong>${counts.total}</strong><span>Total Queue</span></article>
+    <article class="summary-item"><strong>${counts.notSeen}</strong><span>Not Seen</span></article>
+    <article class="summary-item"><strong>${counts.inProgress}</strong><span>In Progress</span></article>
+    <article class="summary-item"><strong>${counts.closed}</strong><span>Closed</span></article>
   `;
 }
 
-function renderHodList() {
-  refs.hodDepartment.value = state.hodDepartment;
-  refs.statusFilter.value = state.statusFilter;
-
-  const complaints = filteredHodComplaints();
-  refs.hodCount.textContent = `${complaints.length} visible`;
-
-  if (complaints.length === 0) {
-    refs.hodList.innerHTML = emptyState("No matching complaints", "Try a different department or status filter.");
-    return;
-  }
-
-  refs.hodList.innerHTML = complaints
-    .map((item) => `
-      <article class="complaint-item ${item.id === state.selectedComplaintId ? "active" : ""}" data-complaint-id="${item.id}">
-        <div class="item-topline">
-          <h5>${escapeHtml(item.title)}</h5>
-          <span class="status-pill ${statusClass(item.status)}">${labelStatus(item.status)}</span>
-        </div>
-        <div class="meta-row">
-          <span>Student: ${escapeHtml(item.studentName)}</span>
-          <span>ID: #${item.id}</span>
-          <span>${item.createdAt}</span>
-        </div>
-      </article>
-    `)
-    .join("");
-
-  Array.from(refs.hodList.querySelectorAll("[data-complaint-id]")).forEach((node) => {
-    node.addEventListener("click", () => openComplaint(Number(node.dataset.complaintId)));
+function renderHodComplaints() {
+  const visible = state.complaints.filter((item) => {
+    if (item.department !== state.hodDepartment) {
+      return false;
+    }
+    if (state.filter !== "ALL" && item.status !== state.filter) {
+      return false;
+    }
+    return true;
   });
-}
 
-function renderDetailPanel() {
-  const complaint = state.complaints.find((item) => item.id === state.selectedComplaintId);
+  refs.hodCount.textContent = `${visible.length} visible`;
 
-  if (!complaint) {
-    refs.detailEmpty.classList.remove("hidden");
-    refs.detailPanel.classList.add("hidden");
-    refs.closingRemarks.value = "";
+  if (!visible.length) {
+    refs.hodComplaints.innerHTML = emptyCard("No departmental matches", "Adjust the department or status filter to continue.");
     return;
   }
 
-  refs.detailEmpty.classList.add("hidden");
-  refs.detailPanel.classList.remove("hidden");
+  refs.hodComplaints.innerHTML = visible.map((item) => `
+    <article class="queue-item ${item.id === state.selectedComplaintId ? "selected" : ""}" data-id="${item.id}">
+      <div class="queue-top">
+        <h5>${escapeHtml(item.studentName)}</h5>
+        <span class="status-pill ${statusClass(item.status)}">${statusLabel(item.status)}</span>
+      </div>
+      <p><strong>Institutional ID:</strong> ${escapeHtml(item.institutionalId)}</p>
+      <p><strong>Category:</strong> ${escapeHtml(item.category)}</p>
+    </article>
+  `).join("");
 
-  refs.detailTitle.textContent = complaint.title;
-  refs.detailStatus.className = `badge status-badge ${statusClass(complaint.status)}`;
-  refs.detailStatus.textContent = labelStatus(complaint.status);
-  refs.detailDescription.textContent = complaint.description;
-  refs.detailMeta.innerHTML = `
-    <span><strong>Complaint ID:</strong> #${complaint.id}</span>
-    <span><strong>Department:</strong> ${escapeHtml(complaint.department)}</span>
-    <span><strong>Student:</strong> ${escapeHtml(complaint.studentName)}</span>
-    <span><strong>Submitted:</strong> ${complaint.createdAt}</span>
-  `;
-  refs.detailHistory.innerHTML = complaint.history.slice().reverse().map(renderHistoryItem).join("");
-  refs.resolveButton.disabled = complaint.status === "RESOLVED" || complaint.status === "REJECTED";
-  refs.rejectButton.disabled = complaint.status === "RESOLVED" || complaint.status === "REJECTED";
-
-  if (complaint.remarks && !refs.closingRemarks.value) {
-    refs.closingRemarks.value = complaint.remarks;
-  }
+  Array.from(refs.hodComplaints.querySelectorAll("[data-id]")).forEach((node) => {
+    node.addEventListener("click", () => openComplaint(Number(node.dataset.id)));
+  });
 }
 
 function openComplaint(id) {
   state.selectedComplaintId = id;
   const complaint = state.complaints.find((item) => item.id === id);
-
   if (complaint && complaint.status === "NOT_SEEN") {
-    updateComplaintStatus(complaint, "IN_PROGRESS", `HOD - ${complaint.department}`, "Complaint opened and acknowledged.");
+    complaint.history.push({
+      from: "NOT_SEEN",
+      to: "IN_PROGRESS",
+      actor: state.hodName,
+      at: nowString(),
+      note: "Complaint opened and acknowledged under Read and Solve."
+    });
+    complaint.status = "IN_PROGRESS";
+    saveState();
+  }
+  render();
+}
+
+function renderDetail() {
+  const complaint = state.complaints.find((item) => item.id === state.selectedComplaintId);
+  if (!complaint) {
+    refs.detailEmpty.classList.remove("hidden");
+    refs.detailView.classList.add("hidden");
+    refs.remarks.value = "";
+    return;
   }
 
-  render();
+  refs.detailEmpty.classList.add("hidden");
+  refs.detailView.classList.remove("hidden");
+
+  refs.detailTitle.textContent = `${complaint.category} Complaint`;
+  refs.detailStatus.className = `badge status-badge ${statusClass(complaint.status)}`;
+  refs.detailStatus.textContent = statusLabel(complaint.status);
+  refs.detailMeta.innerHTML = `
+    <span><strong>ID:</strong> #${complaint.id}</span>
+    <span><strong>Department:</strong> ${escapeHtml(complaint.department)}</span>
+    <span><strong>Student:</strong> ${escapeHtml(complaint.studentName)}</span>
+    <span><strong>Email:</strong> ${escapeHtml(complaint.officialEmail)}</span>
+    <span><strong>Institutional ID:</strong> ${escapeHtml(complaint.institutionalId)}</span>
+    <span><strong>Submitted:</strong> ${complaint.timestamp}</span>
+  `;
+  refs.detailDescription.textContent = complaint.description;
+  refs.detailHistory.innerHTML = complaint.history.slice().reverse().map(renderHistoryItem).join("");
+  refs.remarks.value = complaint.remarks || "";
+  const closed = complaint.status === "RESOLVED" || complaint.status === "REJECTED";
+  refs.resolveBtn.disabled = closed;
+  refs.rejectBtn.disabled = closed;
 }
 
 function finalizeComplaint(nextStatus) {
@@ -341,119 +336,85 @@ function finalizeComplaint(nextStatus) {
     return;
   }
 
-  if (complaint.status === "RESOLVED" || complaint.status === "REJECTED") {
-    return;
-  }
-
-  const remarks = refs.closingRemarks.value.trim();
+  const remarks = refs.remarks.value.trim();
   if (!remarks) {
-    window.alert("Closing remarks are required before resolving or rejecting a complaint.");
+    window.alert("Closing remarks are mandatory before resolving or rejecting a complaint.");
     return;
   }
 
   complaint.remarks = remarks;
-  updateComplaintStatus(complaint, nextStatus, `HOD - ${complaint.department}`, remarks);
+  complaint.history.push({
+    from: complaint.status,
+    to: nextStatus,
+    actor: state.hodName,
+    at: nowString(),
+    note: remarks
+  });
+  complaint.status = nextStatus;
+  saveState();
   render();
 }
 
-function updateComplaintStatus(complaint, nextStatus, actor, remarks) {
-  const previousStatus = complaint.status;
-  complaint.status = nextStatus;
-  complaint.history.push({
-    statusFrom: previousStatus,
-    statusTo: nextStatus,
-    actor,
-    at: formatNow(),
-    remarks
-  });
-  persist();
-}
-
-function filteredHodComplaints() {
-  return state.complaints.filter((item) => {
-    if (item.department !== state.hodDepartment) {
-      return false;
-    }
-
-    if (state.statusFilter !== "ALL" && item.status !== state.statusFilter) {
-      return false;
-    }
-
-    return true;
-  });
-}
-
-function renderHistoryItem(entry) {
-  const title = entry.statusFrom
-    ? `${labelStatus(entry.statusFrom)} -> ${labelStatus(entry.statusTo)}`
-    : labelStatus(entry.statusTo);
-
+function renderHistoryItem(item) {
+  const title = item.from ? `${statusLabel(item.from)} -> ${statusLabel(item.to)}` : statusLabel(item.to);
   return `
     <article class="history-item">
-      <div class="history-topline">
-        <h5>${title}</h5>
-        <span>${entry.at}</span>
+      <div class="queue-top">
+        <strong>${title}</strong>
+        <span>${item.at}</span>
       </div>
-      <p>${escapeHtml(entry.actor)}${entry.remarks ? ` | ${escapeHtml(entry.remarks)}` : ""}</p>
+      <p>${escapeHtml(item.actor)} | ${escapeHtml(item.note)}</p>
     </article>
   `;
 }
 
-function emptyState(title, description) {
-  return `
-    <article class="history-item">
-      <h5>${title}</h5>
-      <p>${description}</p>
-    </article>
-  `;
+function emptyCard(title, copy) {
+  return `<article class="history-item"><strong>${title}</strong><p>${copy}</p></article>`;
 }
 
-function nextComplaintId() {
-  return Math.max(...state.complaints.map((item) => item.id), 1000) + 1;
-}
-
-function loadComplaints() {
+function loadState() {
   const raw = window.localStorage.getItem(STORAGE_KEY);
   if (!raw) {
     return structuredClone(initialComplaints);
   }
-
   try {
     const parsed = JSON.parse(raw);
-    return Array.isArray(parsed) && parsed.length > 0 ? parsed : structuredClone(initialComplaints);
-  } catch (error) {
+    return Array.isArray(parsed) ? parsed : structuredClone(initialComplaints);
+  } catch {
     return structuredClone(initialComplaints);
   }
 }
 
-function persist() {
+function saveState() {
   window.localStorage.setItem(STORAGE_KEY, JSON.stringify(state.complaints));
 }
 
-function labelStatus(status) {
-  const labels = {
+function nextId() {
+  return Math.max(...state.complaints.map((item) => item.id), 3000) + 1;
+}
+
+function nowString() {
+  const d = new Date();
+  const pad = (value) => String(value).padStart(2, "0");
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+}
+
+function statusLabel(status) {
+  return {
     NOT_SEEN: "Not Seen",
     IN_PROGRESS: "In Progress",
     RESOLVED: "Resolved",
     REJECTED: "Rejected"
-  };
-  return labels[status] || status;
+  }[status];
 }
 
 function statusClass(status) {
-  const classes = {
+  return {
     NOT_SEEN: "not-seen",
     IN_PROGRESS: "in-progress",
     RESOLVED: "resolved",
     REJECTED: "rejected"
-  };
-  return classes[status] || "";
-}
-
-function formatNow() {
-  const now = new Date();
-  const pad = (value) => String(value).padStart(2, "0");
-  return `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}`;
+  }[status];
 }
 
 function escapeHtml(value) {
