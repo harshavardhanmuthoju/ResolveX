@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ResolveX | Role-Based Complaint Routing</title>
-  <meta name="description" content="ResolveX is a department-specific complaint tracking application with login-based student, HOD, and admin access.">
+  <title>ResolveX | Complaint Routing Portal</title>
+  <meta name="description" content="ResolveX is a department-specific complaint tracking application with registration, login, and role-based complaint routing.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&family=Manrope:wght@400;500;700&display=swap" rel="stylesheet">
@@ -13,101 +13,145 @@
 <body>
   <div class="page-shell">
     <header class="topbar">
-      <a class="brand" href="#login-shell">
+      <a class="brand" href="#auth-shell">
         <span class="brand-mark">RX</span>
         <span>
           <strong>ResolveX</strong>
-          <small>CVR Login, Routing, and Accountability Portal</small>
+          <small>Department-Specific Complaint Routing</small>
         </span>
       </a>
       <nav class="nav">
-        <a href="#login-shell">Login</a>
-        <a href="#credential-guide">Credentials</a>
+        <a href="#auth-shell">Access</a>
         <a href="#workspace-shell">Workspace</a>
+        <a href="#system-note">System</a>
       </nav>
     </header>
 
     <main>
-      <section class="login-hero" id="login-shell">
+      <section class="auth-hero" id="auth-shell">
         <div class="hero-copy">
-          <p class="eyebrow">Department-Specific Complaint Access</p>
-          <h1>One login page, three roles, clear departmental control.</h1>
+          <p class="eyebrow">Registration, Login, and Complaint Tracking</p>
+          <h1>Register once, log in securely, and route complaints by department.</h1>
           <p class="lead">
-            ResolveX now starts with a role-aware login gateway. Students log in with their institutional
-            ID, while HOD and admin users must provide a username, password, and department so routing
-            stays explicit and accountable.
+            ResolveX keeps the student workflow simple after login. Registered users can submit only
+            their branch and complaint description, while HOD and admin accounts operate through secure,
+            department-aware access.
           </p>
           <div class="hero-grid">
             <article>
-              <strong>Student</strong>
-              <span>Institutional ID login and complaint tracking</span>
+              <strong>Register</strong>
+              <span>Name, username, institutional ID, institute mail, password, department</span>
             </article>
             <article>
-              <strong>HOD</strong>
-              <span>Department-only complaint resolution workspace</span>
+              <strong>Login</strong>
+              <span>Role, username, password, and typed department validation</span>
             </article>
             <article>
-              <strong>Admin</strong>
-              <span>All departments, credential registry, and oversight</span>
+              <strong>Track</strong>
+              <span>Live complaint status with full timeline and closing remarks</span>
             </article>
           </div>
         </div>
 
-        <div class="login-card">
-          <div class="panel-header">
-            <div>
-              <p class="panel-kicker">ResolveX Access</p>
-              <h2>Login to continue</h2>
+        <div class="auth-grid">
+          <section class="auth-card">
+            <div class="panel-header">
+              <div>
+                <p class="panel-kicker">New User</p>
+                <h2>Student Registration</h2>
+              </div>
+              <span class="badge">Register</span>
             </div>
-            <span class="badge">Role Login</span>
-          </div>
 
-          <form id="login-form" class="form-grid compact-grid">
-            <div class="field">
-              <label for="login-role">Role</label>
-              <select id="login-role" name="role">
-                <option value="STUDENT">Student</option>
-                <option value="HOD">HOD</option>
-                <option value="ADMIN">Admin</option>
-              </select>
+            <form id="register-form" class="form-grid compact-grid">
+              <div class="field">
+                <label for="register-name">Name</label>
+                <input id="register-name" name="name" required>
+              </div>
+              <div class="field">
+                <label for="register-username">Username</label>
+                <input id="register-username" name="username" required>
+              </div>
+              <div class="field">
+                <label for="register-id">Institutional ID</label>
+                <input id="register-id" name="institutionalId" required>
+              </div>
+              <div class="field">
+                <label for="register-email">Institute Mail</label>
+                <input id="register-email" name="email" type="email" required>
+              </div>
+              <div class="field">
+                <label for="register-password">Password</label>
+                <input id="register-password" name="password" type="password" required>
+              </div>
+              <div class="field">
+                <label for="register-department">Department</label>
+                <input id="register-department" name="department" placeholder="Type your department" required>
+              </div>
+              <button class="button button-primary" type="submit">Create Account</button>
+              <p id="register-feedback" class="feedback"></p>
+            </form>
+          </section>
+
+          <section class="auth-card">
+            <div class="panel-header">
+              <div>
+                <p class="panel-kicker">Existing User</p>
+                <h2>Login</h2>
+              </div>
+              <span class="badge">Access</span>
             </div>
-            <div class="field">
-              <label for="login-username">Institutional ID / Username</label>
-              <input id="login-username" name="username" value="21B81A0501" required>
-            </div>
-            <div class="field">
-              <label for="login-password">Password</label>
-              <input id="login-password" name="password" type="password" value="student123" required>
-            </div>
-            <div class="field">
-              <label for="login-department">Department</label>
-              <select id="login-department" name="department">
-                <option value="CSE">CSE</option>
-                <option value="ECE">ECE</option>
-                <option value="EEE">EEE</option>
-                <option value="Civil">Civil</option>
-                <option value="Admin Office">Admin Office</option>
-              </select>
-            </div>
-            <button class="button button-primary" type="submit">Login</button>
-            <p id="login-feedback" class="feedback">Use the stored demo credentials below.</p>
-          </form>
+
+            <form id="login-form" class="form-grid compact-grid">
+              <div class="field">
+                <label for="login-role">Role</label>
+                <select id="login-role" name="role">
+                  <option value="STUDENT">Student</option>
+                  <option value="HOD">HOD</option>
+                  <option value="ADMIN">Admin</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="login-username">Username</label>
+                <input id="login-username" name="username" required>
+              </div>
+              <div class="field">
+                <label for="login-password">Password</label>
+                <input id="login-password" name="password" type="password" required>
+              </div>
+              <div class="field">
+                <label for="login-department">Department</label>
+                <input id="login-department" name="department" placeholder="Type your department" required>
+              </div>
+              <button class="button button-primary" type="submit">Login</button>
+              <p id="login-feedback" class="feedback"></p>
+            </form>
+          </section>
         </div>
       </section>
 
-      <section class="section" id="credential-guide">
-        <div class="section-heading">
-          <p class="eyebrow">Stored Demo Credentials</p>
-          <h2>Preloaded users for testing</h2>
+      <section class="section system-note" id="system-note">
+        <div class="cards three">
+          <article class="info-card">
+            <h3>Read and Solve</h3>
+            <p>Opening a complaint changes its status from Not Seen to In Progress and records acknowledgment automatically.</p>
+          </article>
+          <article class="info-card">
+            <h3>Stored Accounts</h3>
+            <p>Registered students and system staff accounts persist locally so the app keeps working across reloads.</p>
+          </article>
+          <article class="info-card">
+            <h3>Live Sync</h3>
+            <p>Complaint and user state sync from browser storage so updates reflect quickly across open sessions.</p>
+          </article>
         </div>
-        <div class="cards three" id="credential-cards"></div>
       </section>
 
       <section class="section workspace-shell hidden" id="workspace-shell">
         <div class="workspace-header">
           <div>
             <p class="eyebrow">Active Workspace</p>
-            <h2 id="workspace-title">ResolveX Dashboard</h2>
+            <h2 id="workspace-title">ResolveX Workspace</h2>
             <p id="workspace-subtitle" class="lead compact-lead"></p>
           </div>
           <div class="workspace-actions">
@@ -120,53 +164,28 @@
           <div class="panel-header">
             <div>
               <p class="panel-kicker">Student Portal</p>
-              <h3>Submit and track your complaints</h3>
+              <h3>Submit your complaint</h3>
             </div>
             <span class="badge">Student</span>
           </div>
 
-          <form id="student-form" class="form-grid">
+          <div class="identity-card" id="student-profile"></div>
+
+          <form id="student-form" class="form-grid student-complaint-grid">
             <div class="field">
-              <label for="student-name">Student Name</label>
-              <input id="student-name" name="studentName" required>
-            </div>
-            <div class="field">
-              <label for="institutional-id">Institutional ID</label>
-              <input id="institutional-id" name="institutionalId" readonly>
-              <small id="id-hint">Format: XXB81AXXXX</small>
-            </div>
-            <div class="field">
-              <label for="official-email">Official Email</label>
-              <input id="official-email" name="officialEmail" readonly>
-            </div>
-            <div class="field">
-              <label for="category">Category</label>
-              <select id="category" name="category">
-                <option>Infrastructure</option>
-                <option>Academic</option>
-                <option>Laboratory</option>
-                <option>Administration</option>
-              </select>
-            </div>
-            <div class="field">
-              <label for="department">Department</label>
-              <select id="department" name="department">
-                <option>CSE</option>
-                <option>ECE</option>
-                <option>EEE</option>
-                <option>Civil</option>
-              </select>
+              <label for="student-branch">Branch Name</label>
+              <input id="student-branch" name="branch" placeholder="Type your branch" required>
             </div>
             <div class="field field-wide">
-              <label for="description">Detailed Description</label>
-              <textarea id="description" name="description" rows="4" placeholder="Describe the issue in detail." required></textarea>
+              <label for="student-description">Description</label>
+              <textarea id="student-description" name="description" rows="4" placeholder="Describe the issue clearly." required></textarea>
             </div>
             <button class="button button-primary" type="submit">Submit Complaint</button>
           </form>
 
           <div class="list-card">
             <div class="list-header">
-              <h4>Complaint History</h4>
+              <h4>Your Complaint Status</h4>
               <span id="student-count"></span>
             </div>
             <div id="student-complaints" class="stack"></div>
@@ -177,7 +196,7 @@
           <div class="panel-header">
             <div>
               <p class="panel-kicker">HOD Dashboard</p>
-              <h3>Department-only complaint queue</h3>
+              <h3>Department complaint queue</h3>
             </div>
             <span class="badge accent">HOD</span>
           </div>
@@ -217,7 +236,7 @@
             <aside class="detail-card">
               <div id="detail-empty" class="empty-state">
                 <h4>No complaint selected</h4>
-                <p>Select a complaint to trigger the "Read and Solve" acknowledgment.</p>
+                <p>Select a complaint to acknowledge and process it.</p>
               </div>
               <div id="detail-view" class="hidden">
                 <div class="detail-top">
@@ -230,15 +249,15 @@
                 <div id="detail-meta" class="detail-meta"></div>
                 <p id="detail-description" class="detail-description"></p>
                 <div class="field">
-                  <label for="hod-remarks">Mandatory Closing Remarks</label>
-                  <textarea id="hod-remarks" rows="3" placeholder="Required for Resolved or Rejected."></textarea>
+                  <label for="hod-remarks">Closing Remarks</label>
+                  <textarea id="hod-remarks" rows="3" placeholder="Required before resolve or reject."></textarea>
                 </div>
                 <div class="detail-actions">
                   <button id="resolve-btn" class="button button-primary" type="button">Resolve</button>
                   <button id="reject-btn" class="button button-secondary danger" type="button">Reject</button>
                 </div>
                 <div class="timeline-card">
-                  <h5>Audit Timeline</h5>
+                  <h5>Status Timeline</h5>
                   <div id="detail-history" class="stack"></div>
                 </div>
               </div>
@@ -250,7 +269,7 @@
           <div class="panel-header">
             <div>
               <p class="panel-kicker">Admin Workspace</p>
-              <h3>Oversight across departments and credential registry</h3>
+              <h3>Complaint oversight across departments</h3>
             </div>
             <span class="badge admin-badge">Admin</span>
           </div>
@@ -261,8 +280,8 @@
               <div id="admin-summary" class="stack"></div>
             </article>
             <article class="info-card">
-              <h3>Stored Login Credentials</h3>
-              <div id="admin-credentials" class="stack"></div>
+              <h3>Registered Users</h3>
+              <div id="admin-users" class="stack"></div>
             </article>
           </div>
 

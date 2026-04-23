@@ -1,118 +1,83 @@
-const COMPLAINTS_KEY = "resolvex-cvr-complaints-v3";
-const CREDENTIALS_KEY = "resolvex-cvr-credentials-v1";
-const SESSION_KEY = "resolvex-cvr-session-v1";
+const USERS_KEY = "resolvex-users-v4";
+const COMPLAINTS_KEY = "resolvex-complaints-v4";
+const SESSION_KEY = "resolvex-session-v4";
 const ID_PATTERN = /^\d{2}B81A[A-Z0-9]{4}$/;
 
-const defaultCredentials = [
+const systemUsers = [
   {
-    role: "STUDENT",
-    username: "21B81A0501",
-    password: "student123",
+    role: "HOD",
+    username: "cvrhod1",
+    password: "Hod@CVR#2711",
     department: "CSE",
-    name: "Harsha Vardhan",
-    email: "21B81A0501@cvr.ac.in"
+    name: "CVR HOD 1",
+    institutionalId: "",
+    email: "cvrhod1@cvr.ac.in",
+    systemManaged: true
   },
   {
     role: "HOD",
-    username: "raks",
-    password: "raks123",
-    department: "CSE",
-    name: "Raks",
-    email: "raks@cvr.ac.in",
-    unit: "CVR1"
+    username: "cvrhod2",
+    password: "Hod@CVR#4826",
+    department: "ECE",
+    name: "CVR HOD 2",
+    institutionalId: "",
+    email: "cvrhod2@cvr.ac.in",
+    systemManaged: true
   },
   {
     role: "ADMIN",
-    username: "cvrm",
-    password: "cvrm123",
+    username: "cvr1",
+    password: "Admin@CVR#3158",
     department: "Admin Office",
-    name: "CVR Management",
-    email: "cvrm@cvr.ac.in",
-    unit: "CVR2"
+    name: "CVR Admin 1",
+    institutionalId: "",
+    email: "cvr1@cvr.ac.in",
+    systemManaged: true
+  },
+  {
+    role: "ADMIN",
+    username: "cvr2",
+    password: "Admin@CVR#9042",
+    department: "Admin Office",
+    name: "CVR Admin 2",
+    institutionalId: "",
+    email: "cvr2@cvr.ac.in",
+    systemManaged: true
   }
 ];
 
 const initialComplaints = [
   {
-    id: 3001,
-    studentName: "Harsha Vardhan",
-    institutionalId: "21B81A0501",
-    officialEmail: "21B81A0501@cvr.ac.in",
-    category: "Laboratory",
-    department: "CSE",
-    description: "Systems in Lab-3 fail during compiler sessions and require repeated manual restarts.",
-    status: "NOT_SEEN",
-    remarks: "",
-    timestamp: "2026-04-23 09:15",
-    history: [
-      {
-        from: null,
-        to: "NOT_SEEN",
-        actor: "System",
-        at: "2026-04-23 09:15",
-        note: "Complaint submitted and routed to CSE."
-      }
-    ]
-  },
-  {
-    id: 3002,
-    studentName: "Harsha Vardhan",
-    institutionalId: "21B81A0501",
-    officialEmail: "21B81A0501@cvr.ac.in",
-    category: "Infrastructure",
-    department: "ECE",
-    description: "Projector alignment in the communication lab is making board visibility poor during practical demonstrations.",
-    status: "IN_PROGRESS",
-    remarks: "",
-    timestamp: "2026-04-22 12:05",
-    history: [
-      {
-        from: null,
-        to: "NOT_SEEN",
-        actor: "System",
-        at: "2026-04-22 12:05",
-        note: "Complaint submitted and routed to ECE."
-      },
-      {
-        from: "NOT_SEEN",
-        to: "IN_PROGRESS",
-        actor: "CVR Management",
-        at: "2026-04-22 12:18",
-        note: "Complaint opened and acknowledged."
-      }
-    ]
-  },
-  {
-    id: 3003,
+    id: 4001,
     studentName: "Rohit Kumar",
+    username: "rohitk",
     institutionalId: "22B81A04H2",
     officialEmail: "22B81A04H2@cvr.ac.in",
-    category: "Academic",
-    department: "CSE",
+    branch: "CSE",
     description: "Timetable clash between project review and lab session needs urgent rescheduling.",
     status: "RESOLVED",
     remarks: "Project review moved to Friday 2 PM after department coordination.",
-    timestamp: "2026-04-21 11:10",
+    timestamp: "2026-04-23 10:05",
     history: [
       {
         from: null,
         to: "NOT_SEEN",
         actor: "System",
-        at: "2026-04-21 11:10",
+        at: "2026-04-23 10:05",
         note: "Complaint submitted and routed to CSE."
       },
       {
         from: "NOT_SEEN",
         to: "IN_PROGRESS",
-        actor: "Raks",
-        at: "2026-04-21 11:26",
+        actor: "CVR HOD 1",
+        at: "2026-04-23 10:20",
         note: "Complaint opened and acknowledged under Read and Solve."
       },
       {
         from: "IN_PROGRESS",
         to: "RESOLVED",
-        actor: "Raks",
-        at: "2026-04-21 12:05",
+        actor: "CVR HOD 1",
+        at: "2026-04-23 11:00",
         note: "Project review moved to Friday 2 PM after department coordination."
       }
     ]
@@ -120,21 +85,19 @@ const initialComplaints = [
 ];
 
 const state = {
+  users: loadUsers(),
   complaints: loadComplaints(),
-  credentials: loadCredentials(),
   session: loadSession(),
   filter: "ALL",
   selectedComplaintId: null
 };
 
 const refs = {
+  registerForm: document.getElementById("register-form"),
+  registerFeedback: document.getElementById("register-feedback"),
   loginForm: document.getElementById("login-form"),
   loginRole: document.getElementById("login-role"),
-  loginUsername: document.getElementById("login-username"),
-  loginPassword: document.getElementById("login-password"),
-  loginDepartment: document.getElementById("login-department"),
   loginFeedback: document.getElementById("login-feedback"),
-  credentialCards: document.getElementById("credential-cards"),
   workspaceShell: document.getElementById("workspace-shell"),
   workspaceTitle: document.getElementById("workspace-title"),
   workspaceSubtitle: document.getElementById("workspace-subtitle"),
@@ -143,11 +106,10 @@ const refs = {
   studentWorkspace: document.getElementById("student-workspace"),
   hodWorkspace: document.getElementById("hod-workspace"),
   adminWorkspace: document.getElementById("admin-workspace"),
+  studentProfile: document.getElementById("student-profile"),
   studentForm: document.getElementById("student-form"),
-  studentName: document.getElementById("student-name"),
-  institutionalId: document.getElementById("institutional-id"),
-  officialEmail: document.getElementById("official-email"),
-  idHint: document.getElementById("id-hint"),
+  studentBranch: document.getElementById("student-branch"),
+  studentDescription: document.getElementById("student-description"),
   studentCount: document.getElementById("student-count"),
   studentComplaints: document.getElementById("student-complaints"),
   hodDisplayName: document.getElementById("hod-display-name"),
@@ -167,7 +129,7 @@ const refs = {
   resolveBtn: document.getElementById("resolve-btn"),
   rejectBtn: document.getElementById("reject-btn"),
   adminSummary: document.getElementById("admin-summary"),
-  adminCredentials: document.getElementById("admin-credentials"),
+  adminUsers: document.getElementById("admin-users"),
   adminCount: document.getElementById("admin-count"),
   adminComplaints: document.getElementById("admin-complaints")
 };
@@ -176,53 +138,76 @@ init();
 
 function init() {
   bindEvents();
-  renderCredentialCards();
-  applyLoginDefaults();
   renderWorkspace();
+  window.addEventListener("storage", handleStorageSync);
+  window.setInterval(refreshLiveState, 4000);
 }
 
 function bindEvents() {
-  refs.loginRole.addEventListener("change", applyLoginDefaults);
+  refs.registerForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const formData = new FormData(refs.registerForm);
+
+    const user = {
+      role: "STUDENT",
+      name: String(formData.get("name")).trim(),
+      username: String(formData.get("username")).trim(),
+      institutionalId: String(formData.get("institutionalId")).toUpperCase().trim(),
+      email: String(formData.get("email")).trim().toLowerCase(),
+      password: String(formData.get("password")).trim(),
+      department: String(formData.get("department")).trim(),
+      systemManaged: false
+    };
+
+    const validation = validateRegistration(user);
+    if (validation) {
+      refs.registerFeedback.textContent = validation;
+      refs.registerFeedback.style.color = "#b63e3e";
+      return;
+    }
+
+    state.users.push(user);
+    saveUsers();
+    refs.registerForm.reset();
+    refs.registerFeedback.textContent = "Registration complete. You can log in now.";
+    refs.registerFeedback.style.color = "#12805c";
+  });
 
   refs.loginForm.addEventListener("submit", (event) => {
     event.preventDefault();
+    const formData = new FormData(refs.loginForm);
+    const role = String(formData.get("role"));
+    const username = String(formData.get("username")).trim();
+    const password = String(formData.get("password")).trim();
+    const department = String(formData.get("department")).trim();
 
-    const role = refs.loginRole.value;
-    const username = refs.loginUsername.value.trim();
-    const password = refs.loginPassword.value.trim();
-    const department = refs.loginDepartment.value;
-
-    const match = state.credentials.find((item) => {
-      if (item.role !== role) {
-        return false;
-      }
-
-      if (role === "STUDENT") {
-        return item.username.toUpperCase() === username.toUpperCase()
-          && item.password === password
-          && item.department === department;
-      }
-
-      return item.username.toLowerCase() === username.toLowerCase()
+    const user = state.users.find((item) => {
+      const usernameMatches = item.role === "STUDENT"
+        ? item.username === username
+        : item.username.toLowerCase() === username.toLowerCase();
+      return item.role === role
+        && usernameMatches
         && item.password === password
-        && item.department === department;
+        && item.department.toLowerCase() === department.toLowerCase();
     });
 
-    if (!match) {
-      refs.loginFeedback.textContent = "Login failed. Check role, username, password, and department.";
+    if (!user) {
+      refs.loginFeedback.textContent = "Login failed. Check role, username, password, and typed department.";
       refs.loginFeedback.style.color = "#b63e3e";
       return;
     }
 
     state.session = {
-      role: match.role,
-      username: match.username,
-      name: match.name,
-      department: match.department,
-      email: match.email
+      role: user.role,
+      username: user.username,
+      name: user.name,
+      institutionalId: user.institutionalId,
+      department: user.department,
+      email: user.email
     };
     saveSession();
-    refs.loginFeedback.textContent = "Login successful. Workspace unlocked.";
+    refs.loginForm.reset();
+    refs.loginFeedback.textContent = "Login successful.";
     refs.loginFeedback.style.color = "#12805c";
     state.selectedComplaintId = null;
     renderWorkspace();
@@ -237,18 +222,25 @@ function bindEvents() {
 
   refs.studentForm.addEventListener("submit", (event) => {
     event.preventDefault();
-    if (!state.session || state.session.role !== "STUDENT") {
+    const session = state.session;
+    if (!session || session.role !== "STUDENT") {
+      return;
+    }
+
+    const branch = refs.studentBranch.value.trim();
+    const description = refs.studentDescription.value.trim();
+    if (!branch || !description) {
       return;
     }
 
     const complaint = {
       id: nextId(),
-      studentName: refs.studentName.value.trim(),
-      institutionalId: refs.institutionalId.value.trim(),
-      officialEmail: refs.officialEmail.value.trim(),
-      category: document.getElementById("category").value,
-      department: document.getElementById("department").value,
-      description: document.getElementById("description").value.trim(),
+      studentName: session.name,
+      username: session.username,
+      institutionalId: session.institutionalId,
+      officialEmail: session.email,
+      branch,
+      description,
       status: "NOT_SEEN",
       remarks: "",
       timestamp: nowString(),
@@ -258,14 +250,14 @@ function bindEvents() {
           to: "NOT_SEEN",
           actor: "System",
           at: nowString(),
-          note: `Complaint submitted and routed to ${document.getElementById("department").value}.`
+          note: `Complaint submitted and routed to ${branch}.`
         }
       ]
     };
 
     state.complaints.unshift(complaint);
     saveComplaints();
-    document.getElementById("description").value = "";
+    refs.studentForm.reset();
     renderWorkspace();
   });
 
@@ -279,32 +271,26 @@ function bindEvents() {
   refs.rejectBtn.addEventListener("click", () => finalizeComplaint("REJECTED"));
 }
 
-function applyLoginDefaults() {
-  const role = refs.loginRole.value;
-  const defaults = {
-    STUDENT: { username: "21B81A0501", password: "student123", department: "CSE" },
-    HOD: { username: "raks", password: "raks123", department: "CSE" },
-    ADMIN: { username: "cvrm", password: "cvrm123", department: "Admin Office" }
-  };
+function validateRegistration(user) {
+  if (!ID_PATTERN.test(user.institutionalId)) {
+    return "Institutional ID must match XXB81AXXXX.";
+  }
 
-  refs.loginUsername.value = defaults[role].username;
-  refs.loginPassword.value = defaults[role].password;
-  refs.loginDepartment.value = defaults[role].department;
-  refs.loginFeedback.textContent = "Use the stored demo credentials below.";
-  refs.loginFeedback.style.color = "";
-}
+  if (!user.email.endsWith("@cvr.ac.in")) {
+    return "Institute mail must use the @cvr.ac.in domain.";
+  }
 
-function renderCredentialCards() {
-  refs.credentialCards.innerHTML = state.credentials.map((item) => `
-    <article class="info-card">
-      <h3>${escapeHtml(item.role)} Access</h3>
-      <p><strong>Name:</strong> ${escapeHtml(item.name)}</p>
-      <p><strong>Username:</strong> ${escapeHtml(item.username)}</p>
-      <p><strong>Password:</strong> ${escapeHtml(item.password)}</p>
-      <p><strong>Department:</strong> ${escapeHtml(item.department)}</p>
-      <p><strong>Email:</strong> ${escapeHtml(item.email)}</p>
-    </article>
-  `).join("");
+  const usernameExists = state.users.some((item) => item.username.toLowerCase() === user.username.toLowerCase());
+  if (usernameExists) {
+    return "Username already exists.";
+  }
+
+  const idExists = state.users.some((item) => item.institutionalId && item.institutionalId === user.institutionalId);
+  if (idExists) {
+    return "Institutional ID already exists.";
+  }
+
+  return "";
 }
 
 function renderWorkspace() {
@@ -315,14 +301,14 @@ function renderWorkspace() {
   refs.adminWorkspace.classList.add("hidden");
 
   if (!session) {
-    refs.workspaceTitle.textContent = "ResolveX Dashboard";
-    refs.workspaceSubtitle.textContent = "Login with one of the stored accounts to open the correct workspace.";
+    refs.workspaceTitle.textContent = "ResolveX Workspace";
+    refs.workspaceSubtitle.textContent = "Register if you are new, then log in with your role and department.";
     refs.sessionChip.textContent = "No active session";
     return;
   }
 
   refs.sessionChip.textContent = `${session.name} | ${session.role} | ${session.department}`;
-  refs.workspaceSubtitle.textContent = `${session.email} is active. Department entered at login controls the visible workspace scope.`;
+  refs.workspaceSubtitle.textContent = `${session.email} is active. Department entered at login controls this workspace scope.`;
 
   if (session.role === "STUDENT") {
     refs.workspaceTitle.textContent = "Student Complaint Workspace";
@@ -340,21 +326,40 @@ function renderWorkspace() {
 
   refs.workspaceTitle.textContent = "Admin Oversight Workspace";
   refs.adminWorkspace.classList.remove("hidden");
-  renderAdminWorkspace(session);
+  renderAdminWorkspace();
 }
 
 function renderStudentWorkspace(session) {
-  refs.studentName.value = session.name;
-  refs.institutionalId.value = session.username.toUpperCase();
-  refs.officialEmail.value = session.email;
-  refs.idHint.textContent = ID_PATTERN.test(session.username.toUpperCase()) ? "Institutional ID accepted." : "Format: XXB81AXXXX";
-  refs.idHint.style.color = "#12805c";
+  refs.studentProfile.innerHTML = `
+    <strong>${escapeHtml(session.name)}</strong>
+    <p><strong>Username:</strong> ${escapeHtml(session.username)}</p>
+    <p><strong>Institutional ID:</strong> ${escapeHtml(session.institutionalId)}</p>
+    <p><strong>Institute Mail:</strong> ${escapeHtml(session.email)}</p>
+    <p><strong>Department:</strong> ${escapeHtml(session.department)}</p>
+  `;
 
-  const complaints = state.complaints.filter((item) => item.institutionalId === session.username.toUpperCase());
+  const complaints = state.complaints.filter((item) => item.username === session.username);
   refs.studentCount.textContent = `${complaints.length} complaint${complaints.length === 1 ? "" : "s"}`;
   refs.studentComplaints.innerHTML = complaints.length
-    ? complaints.map(renderComplaintCard).join("")
-    : emptyCard("No complaints yet", "Submit a complaint to start your ResolveX history.");
+    ? complaints.map(renderStudentComplaintCard).join("")
+    : emptyCard("No complaints yet", "After login, you only need to enter branch name and description to submit a complaint.");
+}
+
+function renderStudentComplaintCard(item) {
+  return `
+    <article class="queue-item">
+      <div class="queue-top">
+        <h5>${escapeHtml(item.branch)}</h5>
+        <span class="status-pill ${statusClass(item.status)}">${statusLabel(item.status)}</span>
+      </div>
+      <p><strong>ID:</strong> #${item.id}</p>
+      <p>${escapeHtml(item.description)}</p>
+      ${item.remarks ? `<p><strong>Remarks:</strong> ${escapeHtml(item.remarks)}</p>` : ""}
+      <div class="stack">
+        ${item.history.slice().reverse().map(renderHistoryItem).join("")}
+      </div>
+    </article>
+  `;
 }
 
 function renderHodWorkspace(session) {
@@ -362,7 +367,7 @@ function renderHodWorkspace(session) {
   refs.hodDepartment.value = session.department;
   refs.statusFilter.value = state.filter;
 
-  const deptComplaints = state.complaints.filter((item) => item.department === session.department);
+  const deptComplaints = state.complaints.filter((item) => item.branch.toLowerCase() === session.department.toLowerCase());
   const visible = deptComplaints.filter((item) => state.filter === "ALL" || item.status === state.filter);
   const counts = {
     total: deptComplaints.length,
@@ -386,37 +391,37 @@ function renderHodWorkspace(session) {
             <h5>${escapeHtml(item.studentName)}</h5>
             <span class="status-pill ${statusClass(item.status)}">${statusLabel(item.status)}</span>
           </div>
+          <p><strong>Branch:</strong> ${escapeHtml(item.branch)}</p>
           <p><strong>Institutional ID:</strong> ${escapeHtml(item.institutionalId)}</p>
-          <p><strong>Category:</strong> ${escapeHtml(item.category)}</p>
         </article>
       `).join("")
-    : emptyCard("No departmental matches", "Adjust the status filter to continue.");
+    : emptyCard("No complaints for this department", "This queue updates as new complaints are submitted.");
 
   Array.from(refs.hodComplaints.querySelectorAll("[data-id]")).forEach((node) => {
     node.addEventListener("click", () => openComplaint(Number(node.dataset.id), session));
   });
 
-  renderDetail(session, false);
+  renderDetail(session);
 }
 
 function renderAdminWorkspace() {
-  const countsByDepartment = aggregateDepartmentCounts();
-  refs.adminSummary.innerHTML = Object.entries(countsByDepartment).map(([department, count]) => `
+  refs.adminSummary.innerHTML = Object.entries(aggregateDepartmentCounts()).map(([department, count]) => `
     <article class="admin-stat">
       <strong>${escapeHtml(department)}</strong>
       <p>${count} complaint${count === 1 ? "" : "s"}</p>
     </article>
   `).join("");
 
-  refs.adminCredentials.innerHTML = state.credentials.map((item) => `
-    <article class="credential-item">
+  refs.adminUsers.innerHTML = state.users.map((user) => `
+    <article class="user-item">
       <div class="queue-top">
-        <strong>${escapeHtml(item.name)}</strong>
-        <span class="badge ${item.role === "ADMIN" ? "admin-badge" : item.role === "HOD" ? "accent" : ""}">${escapeHtml(item.role)}</span>
+        <strong>${escapeHtml(user.name)}</strong>
+        <span class="badge ${user.role === "ADMIN" ? "admin-badge" : user.role === "HOD" ? "accent" : ""}">${escapeHtml(user.role)}</span>
       </div>
-      <p><strong>Username:</strong> ${escapeHtml(item.username)}</p>
-      <p><strong>Password:</strong> ${escapeHtml(item.password)}</p>
-      <p><strong>Department:</strong> ${escapeHtml(item.department)}</p>
+      <p><strong>Username:</strong> ${escapeHtml(user.username)}</p>
+      ${user.institutionalId ? `<p><strong>Institutional ID:</strong> ${escapeHtml(user.institutionalId)}</p>` : ""}
+      <p><strong>Email:</strong> ${escapeHtml(user.email)}</p>
+      <p><strong>Department:</strong> ${escapeHtml(user.department)}</p>
     </article>
   `).join("");
 
@@ -424,30 +429,14 @@ function renderAdminWorkspace() {
   refs.adminComplaints.innerHTML = state.complaints.map((item) => `
     <article class="queue-item">
       <div class="queue-top">
-        <h5>${escapeHtml(item.studentName)} | ${escapeHtml(item.department)}</h5>
+        <h5>${escapeHtml(item.studentName)} | ${escapeHtml(item.branch)}</h5>
         <span class="status-pill ${statusClass(item.status)}">${statusLabel(item.status)}</span>
       </div>
       <p><strong>Institutional ID:</strong> ${escapeHtml(item.institutionalId)}</p>
-      <p><strong>Category:</strong> ${escapeHtml(item.category)}</p>
       <p>${escapeHtml(item.description)}</p>
+      ${item.remarks ? `<p><strong>Remarks:</strong> ${escapeHtml(item.remarks)}</p>` : ""}
     </article>
   `).join("");
-}
-
-function renderComplaintCard(item) {
-  return `
-    <article class="queue-item">
-      <div class="queue-top">
-        <h5>${escapeHtml(item.category)} | ${escapeHtml(item.department)}</h5>
-        <span class="status-pill ${statusClass(item.status)}">${statusLabel(item.status)}</span>
-      </div>
-      <p><strong>ID:</strong> #${item.id} | <strong>Email:</strong> ${escapeHtml(item.officialEmail)}</p>
-      <p>${escapeHtml(item.description)}</p>
-      <div class="stack">
-        ${item.history.slice().reverse().map(renderHistoryItem).join("")}
-      </div>
-    </article>
-  `;
 }
 
 function openComplaint(id, session) {
@@ -478,12 +467,12 @@ function renderDetail(session) {
 
   refs.detailEmpty.classList.add("hidden");
   refs.detailView.classList.remove("hidden");
-  refs.detailTitle.textContent = `${complaint.category} Complaint`;
+  refs.detailTitle.textContent = `${complaint.branch} Complaint`;
   refs.detailStatus.className = `badge status-badge ${statusClass(complaint.status)}`;
   refs.detailStatus.textContent = statusLabel(complaint.status);
   refs.detailMeta.innerHTML = `
     <span><strong>ID:</strong> #${complaint.id}</span>
-    <span><strong>Department:</strong> ${escapeHtml(complaint.department)}</span>
+    <span><strong>Branch:</strong> ${escapeHtml(complaint.branch)}</span>
     <span><strong>Student:</strong> ${escapeHtml(complaint.studentName)}</span>
     <span><strong>Email:</strong> ${escapeHtml(complaint.officialEmail)}</span>
     <span><strong>Institutional ID:</strong> ${escapeHtml(complaint.institutionalId)}</span>
@@ -540,11 +529,32 @@ function renderHistoryItem(item) {
   `;
 }
 
-function aggregateDepartmentCounts() {
-  return state.complaints.reduce((acc, complaint) => {
-    acc[complaint.department] = (acc[complaint.department] || 0) + 1;
-    return acc;
-  }, {});
+function handleStorageSync(event) {
+  if (![USERS_KEY, COMPLAINTS_KEY, SESSION_KEY].includes(event.key)) {
+    return;
+  }
+  refreshLiveState();
+}
+
+function refreshLiveState() {
+  state.users = loadUsers();
+  state.complaints = loadComplaints();
+  state.session = loadSession();
+  renderWorkspace();
+}
+
+function loadUsers() {
+  const raw = window.localStorage.getItem(USERS_KEY);
+  if (!raw) {
+    window.localStorage.setItem(USERS_KEY, JSON.stringify(systemUsers));
+    return structuredClone(systemUsers);
+  }
+  try {
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed : structuredClone(systemUsers);
+  } catch {
+    return structuredClone(systemUsers);
+  }
 }
 
 function loadComplaints() {
@@ -561,20 +571,6 @@ function loadComplaints() {
   }
 }
 
-function loadCredentials() {
-  const raw = window.localStorage.getItem(CREDENTIALS_KEY);
-  if (!raw) {
-    window.localStorage.setItem(CREDENTIALS_KEY, JSON.stringify(defaultCredentials));
-    return structuredClone(defaultCredentials);
-  }
-  try {
-    const parsed = JSON.parse(raw);
-    return Array.isArray(parsed) ? parsed : structuredClone(defaultCredentials);
-  } catch {
-    return structuredClone(defaultCredentials);
-  }
-}
-
 function loadSession() {
   const raw = window.localStorage.getItem(SESSION_KEY);
   if (!raw) {
@@ -585,6 +581,10 @@ function loadSession() {
   } catch {
     return null;
   }
+}
+
+function saveUsers() {
+  window.localStorage.setItem(USERS_KEY, JSON.stringify(state.users));
 }
 
 function saveComplaints() {
@@ -599,8 +599,15 @@ function saveSession() {
   window.localStorage.setItem(SESSION_KEY, JSON.stringify(state.session));
 }
 
+function aggregateDepartmentCounts() {
+  return state.complaints.reduce((acc, complaint) => {
+    acc[complaint.branch] = (acc[complaint.branch] || 0) + 1;
+    return acc;
+  }, {});
+}
+
 function nextId() {
-  return Math.max(...state.complaints.map((item) => item.id), 3000) + 1;
+  return Math.max(...state.complaints.map((item) => item.id), 4000) + 1;
 }
 
 function nowString() {
