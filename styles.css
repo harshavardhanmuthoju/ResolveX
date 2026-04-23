@@ -171,6 +171,36 @@ body {
   grid-template-columns: 1fr;
 }
 
+.auth-module {
+  display: grid;
+  gap: 18px;
+}
+
+.auth-switcher {
+  display: inline-flex;
+  gap: 10px;
+  padding: 8px;
+  width: fit-content;
+  border-radius: 999px;
+  background: rgba(0, 85, 165, 0.08);
+}
+
+.switch-button {
+  border: 0;
+  background: transparent;
+  border-radius: 999px;
+  padding: 12px 18px;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  color: var(--text);
+}
+
+.switch-button.active {
+  background: var(--text);
+  color: #fff;
+}
+
 .hero-grid article,
 .auth-card,
 .info-card,

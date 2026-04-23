@@ -96,8 +96,11 @@ const refs = {
   registerForm: document.getElementById("register-form"),
   registerFeedback: document.getElementById("register-feedback"),
   loginForm: document.getElementById("login-form"),
+  showRegister: document.getElementById("show-register"),
+  showLogin: document.getElementById("show-login"),
   loginRole: document.getElementById("login-role"),
   loginFeedback: document.getElementById("login-feedback"),
+  accessShell: document.getElementById("access-shell"),
   workspaceShell: document.getElementById("workspace-shell"),
   workspaceTitle: document.getElementById("workspace-title"),
   workspaceSubtitle: document.getElementById("workspace-subtitle"),
@@ -138,12 +141,16 @@ init();
 
 function init() {
   bindEvents();
+  showAuthMode("register");
   renderWorkspace();
   window.addEventListener("storage", handleStorageSync);
   window.setInterval(refreshLiveState, 4000);
 }
 
 function bindEvents() {
+  refs.showRegister.addEventListener("click", () => showAuthMode("register"));
+  refs.showLogin.addEventListener("click", () => showAuthMode("login"));
+
   refs.registerForm.addEventListener("submit", (event) => {
     event.preventDefault();
     const formData = new FormData(refs.registerForm);
@@ -171,6 +178,7 @@ function bindEvents() {
     refs.registerForm.reset();
     refs.registerFeedback.textContent = "Registration complete. You can log in now.";
     refs.registerFeedback.style.color = "#12805c";
+    showAuthMode("login");
   });
 
   refs.loginForm.addEventListener("submit", (event) => {
@@ -211,6 +219,7 @@ function bindEvents() {
     refs.loginFeedback.style.color = "#12805c";
     state.selectedComplaintId = null;
     renderWorkspace();
+    refs.workspaceShell.scrollIntoView({ behavior: "smooth", block: "start" });
   });
 
   refs.logoutBtn.addEventListener("click", () => {
@@ -276,8 +285,9 @@ function validateRegistration(user) {
     return "Institutional ID must match XXB81AXXXX.";
   }
 
-  if (!user.email.endsWith("@cvr.ac.in")) {
-    return "Institute mail must use the @cvr.ac.in domain.";
+  const expectedEmail = `${user.institutionalId}@cvr.ac.in`.toLowerCase();
+  if (user.email !== expectedEmail) {
+    return "Institute mail must be in the format XXB81AXXXX@cvr.ac.in and match the institutional ID.";
   }
 
   const usernameExists = state.users.some((item) => item.username.toLowerCase() === user.username.toLowerCase());
@@ -293,14 +303,24 @@ function validateRegistration(user) {
   return "";
 }
 
+function showAuthMode(mode) {
+  const registering = mode === "register";
+  refs.registerForm.classList.toggle("hidden", !registering);
+  refs.loginForm.classList.toggle("hidden", registering);
+  refs.showRegister.classList.toggle("active", registering);
+  refs.showLogin.classList.toggle("active", !registering);
+}
+
 function renderWorkspace() {
   const session = state.session;
   refs.workspaceShell.classList.toggle("hidden", !session);
+  refs.accessShell.classList.toggle("hidden", Boolean(session));
   refs.studentWorkspace.classList.add("hidden");
   refs.hodWorkspace.classList.add("hidden");
   refs.adminWorkspace.classList.add("hidden");
 
   if (!session) {
+    refs.accessShell.classList.remove("hidden");
     refs.workspaceTitle.textContent = "ResolveX Workspace";
     refs.workspaceSubtitle.textContent = "Register if you are new, then log in with your role and department.";
     refs.sessionChip.textContent = "No active session";

@@ -13,7 +13,7 @@
 <body>
   <div class="page-shell">
     <header class="topbar">
-      <a class="brand" href="#auth-shell">
+      <a class="brand" href="#access-shell">
         <span class="brand-mark">RX</span>
         <span>
           <strong>ResolveX</strong>
@@ -21,21 +21,20 @@
         </span>
       </a>
       <nav class="nav">
-        <a href="#auth-shell">Access</a>
-        <a href="#workspace-shell">Workspace</a>
+        <a href="#access-shell">Access</a>
         <a href="#system-note">System</a>
       </nav>
     </header>
 
     <main>
-      <section class="auth-hero" id="auth-shell">
+      <section class="auth-hero" id="access-shell">
         <div class="hero-copy">
           <p class="eyebrow">Registration, Login, and Complaint Tracking</p>
-          <h1>Register once, log in securely, and route complaints by department.</h1>
+          <h1>Register once, sign in, and go straight into the right complaint workspace.</h1>
           <p class="lead">
-            ResolveX keeps the student workflow simple after login. Registered users can submit only
-            their branch and complaint description, while HOD and admin accounts operate through secure,
-            department-aware access.
+            ResolveX keeps access clean with one combined module for registration and login. Institute
+            mail is tied to the institutional ID pattern, and successful login redirects directly into
+            the student, HOD, or admin workspace.
           </p>
           <div class="hero-grid">
             <article>
@@ -47,87 +46,80 @@
               <span>Role, username, password, and typed department validation</span>
             </article>
             <article>
-              <strong>Track</strong>
-              <span>Live complaint status with full timeline and closing remarks</span>
+              <strong>Route</strong>
+              <span>Immediate redirect into the correct complaint page after sign-in</span>
             </article>
           </div>
         </div>
 
-        <div class="auth-grid">
-          <section class="auth-card">
-            <div class="panel-header">
-              <div>
-                <p class="panel-kicker">New User</p>
-                <h2>Student Registration</h2>
-              </div>
-              <span class="badge">Register</span>
+        <section class="auth-card auth-module">
+          <div class="panel-header">
+            <div>
+              <p class="panel-kicker">ResolveX Access</p>
+              <h2>Register or Login</h2>
             </div>
+            <span class="badge">Single Module</span>
+          </div>
 
-            <form id="register-form" class="form-grid compact-grid">
-              <div class="field">
-                <label for="register-name">Name</label>
-                <input id="register-name" name="name" required>
-              </div>
-              <div class="field">
-                <label for="register-username">Username</label>
-                <input id="register-username" name="username" required>
-              </div>
-              <div class="field">
-                <label for="register-id">Institutional ID</label>
-                <input id="register-id" name="institutionalId" required>
-              </div>
-              <div class="field">
-                <label for="register-email">Institute Mail</label>
-                <input id="register-email" name="email" type="email" required>
-              </div>
-              <div class="field">
-                <label for="register-password">Password</label>
-                <input id="register-password" name="password" type="password" required>
-              </div>
-              <div class="field">
-                <label for="register-department">Department</label>
-                <input id="register-department" name="department" placeholder="Type your department" required>
-              </div>
-              <button class="button button-primary" type="submit">Create Account</button>
-              <p id="register-feedback" class="feedback"></p>
-            </form>
-          </section>
+          <div class="auth-switcher">
+            <button id="show-register" class="switch-button active" type="button">Register</button>
+            <button id="show-login" class="switch-button" type="button">Login</button>
+          </div>
 
-          <section class="auth-card">
-            <div class="panel-header">
-              <div>
-                <p class="panel-kicker">Existing User</p>
-                <h2>Login</h2>
-              </div>
-              <span class="badge">Access</span>
+          <form id="register-form" class="form-grid compact-grid">
+            <div class="field">
+              <label for="register-name">Name</label>
+              <input id="register-name" name="name" required>
             </div>
+            <div class="field">
+              <label for="register-username">Username</label>
+              <input id="register-username" name="username" required>
+            </div>
+            <div class="field">
+              <label for="register-id">Institutional ID</label>
+              <input id="register-id" name="institutionalId" required>
+            </div>
+            <div class="field">
+              <label for="register-email">Institute Mail</label>
+              <input id="register-email" name="email" type="email" placeholder="21B81A0501@cvr.ac.in" required>
+            </div>
+            <div class="field">
+              <label for="register-password">Password</label>
+              <input id="register-password" name="password" type="password" required>
+            </div>
+            <div class="field">
+              <label for="register-department">Department</label>
+              <input id="register-department" name="department" placeholder="Type your department" required>
+            </div>
+            <button class="button button-primary" type="submit">Create Account</button>
+            <p id="register-feedback" class="feedback"></p>
+          </form>
 
-            <form id="login-form" class="form-grid compact-grid">
-              <div class="field">
-                <label for="login-role">Role</label>
-                <select id="login-role" name="role">
-                  <option value="STUDENT">Student</option>
-                  <option value="HOD">HOD</option>
-                  <option value="ADMIN">Admin</option>
-                </select>
-              </div>
-              <div class="field">
-                <label for="login-username">Username</label>
-                <input id="login-username" name="username" required>
-              </div>
-              <div class="field">
-                <label for="login-password">Password</label>
-                <input id="login-password" name="password" type="password" required>
-              </div>
-              <div class="field">
-                <label for="login-department">Department</label>
-                <input id="login-department" name="department" placeholder="Type your department" required>
-              </div>
-              <button class="button button-primary" type="submit">Login</button>
-              <p id="login-feedback" class="feedback"></p>
-            </form>
-          </section>
-        </div>
+          <form id="login-form" class="form-grid compact-grid hidden">
+            <div class="field">
+              <label for="login-role">Role</label>
+              <select id="login-role" name="role">
+                <option value="STUDENT">Student</option>
+                <option value="HOD">HOD</option>
+                <option value="ADMIN">Admin</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="login-username">Username</label>
+              <input id="login-username" name="username" required>
+            </div>
+            <div class="field">
+              <label for="login-password">Password</label>
+              <input id="login-password" name="password" type="password" required>
+            </div>
+            <div class="field">
+              <label for="login-department">Department</label>
+              <input id="login-department" name="department" placeholder="Type your department" required>
+            </div>
+            <button class="button button-primary" type="submit">Login</button>
+            <p id="login-feedback" class="feedback"></p>
+          </form>
+        </section>
       </section>
 
       <section class="section system-note" id="system-note">
@@ -137,8 +129,8 @@
             <p>Opening a complaint changes its status from Not Seen to In Progress and records acknowledgment automatically.</p>
           </article>
           <article class="info-card">
-            <h3>Stored Accounts</h3>
-            <p>Registered students and system staff accounts persist locally so the app keeps working across reloads.</p>
+            <h3>Institute Identity</h3>
+            <p>Institutional IDs must match `XXB81AXXXX`, and institute mail must use the same identifier before `@cvr.ac.in`.</p>
           </article>
           <article class="info-card">
             <h3>Live Sync</h3>
